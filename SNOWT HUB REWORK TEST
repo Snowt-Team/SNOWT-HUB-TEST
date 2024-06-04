@@ -114,7 +114,7 @@ local Section = Tab:AddSection({
 Tab:AddToggle({
     Name = "ESP",
   Default = false,
-  Callback = function(v)
+  Callback = function(espv)
 _G.FriendColor = Color3.fromRGB(0, 0, 255)
 _G.EnemyColor = Color3.fromRGB(255, 0, 0)
 _G.UseTeamColor = true
@@ -396,28 +396,19 @@ local Section = Tab:AddSection({
 Tab:AddToggle({
     Name = "Enable/Disable Auto Clck",
     Default = false,
-    Callback = function(auclck)
-        local range = 99e9
-
-local player = game:GetService("Players").LocalPlayer
-
-game:GetService("RunService").RenderStepped:Connect(function(auclck)
-    local p = game.Players:GetPlayers()
-    for i = 2, #p do local v = p[i].Character
-        if v and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 and v:FindFirstChild("HumanoidRootPart") and player:DistanceFromCharacter(v.HumanoidRootPart.Position) <= range then
-            local tool = player.Character and player.Character:FindFirstChildOfClass("Tool")
-            if tool and tool:FindFirstChild("Handle") then
-                tool:Activate()
-                for i,v in next, v:GetChildren() do
-                    if v:IsA("BasePart") then
-                        firetouchinterest(tool.Handle,v,0)
-                        firetouchinterest(tool.Handle,v,1)
-                    end
-                end
-            end
-        end
-    end
-end)
+    Callback = function(bool)
+        if bool== true then
+_G.AutoClick = true
+while _G.AutoClick == true do
+game:GetService("ReplicatedStorage").Packages.Knit.Services.ClickService.RF.Click:InvokeServer()
+game:GetService("ReplicatedStorage").Packages.Knit.Services.ClickService.RF.Click:InvokeServer()
+game:GetService("ReplicatedStorage").Packages.Knit.Services.ClickService.RF.Click:InvokeServer()
+game:GetService("ReplicatedStorage").Packages.Knit.Services.ClickService.RF.Click:InvokeServer()
+game:GetService("ReplicatedStorage").Packages.Knit.Services.ClickService.RF.Click:InvokeServer()
+game:GetService("ReplicatedStorage").Packages.Knit.Services.ClickService.RF.Click:InvokeServer()
+wait()
+end
+end
 end
 })
 
