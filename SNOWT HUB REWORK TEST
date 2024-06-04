@@ -55,9 +55,18 @@ Tab:AddButton({
     end
 })
 
-Tab:AddButton({
+Tab:AddToggle({
     Name = "Inf. Jumps",
-    Callback = function(infj)loadstring(game:HttpGet(("https://pastebin.com/raw/cJusavgh"), true))()
+    Default = false,
+    Callback = function(infj)
+        if State then
+        local InfiniteJumpEnabled = false 
+        else
+            InfinityJumpEnabled = true
+            game:GetService("UserInputService").JumpRequest:connect(function(infj) 	if InfiniteJumpEnabled then
+        game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
+        end end)
+end
 end
 })
 
