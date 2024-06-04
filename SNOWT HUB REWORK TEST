@@ -111,16 +111,7 @@ local Section = Tab:AddSection({
     Name = "Esp:"
 })
 
-  
-Tab:AddToggle({
-    Name = "ESP",
-  Default = false,
-  Callback = function(bool)
-    getgenv().usingEsp = bool
-    if bool then
-      espEnemy()
-    end
-    function espEnemy()
+function espEnemy()
   spawn(function()
     if getgenv().usingEsp == true then
       if not currentlyRespawning then
@@ -146,6 +137,16 @@ Tab:AddToggle({
       end
     end
   end)
+    end
+
+  
+Tab:AddToggle({
+    Name = "ESP",
+  Default = false,
+  Callback = function(bool)
+    getgenv().usingEsp = bool
+    if bool then
+      espEnemy()
     end
 end
 })
