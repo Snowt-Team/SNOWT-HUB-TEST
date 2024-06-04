@@ -4,7 +4,7 @@ local Window = OrionLib:MakeWindow({Name = "SNOWT HUB [REWRITEN]", HidePremium =
 
 OrionLib:MakeNotification({
 	Name = "By Snowt Team",
-	Content = "Это тестовый скрипт, все функции в раннем доступе",
+	Content = "TEST SCRIPT.",
 	Image = "rbxassetid://4483345998",
 	Time = 5
 })
@@ -51,7 +51,7 @@ Tab:AddTextbox({
 Tab:AddButton({
     Name = "Default JumpHeight",
     Callback = function(defj)
-        game.Players.LocalPlayer.Character.Humanoid.JumpHeight = 7
+        game.Players.LocalPlayer.Character.Humanoid = 7
     end
 })
 
@@ -106,9 +106,8 @@ Tab:AddDropdown({
 local Section = Tab:AddSection({
     Name = "Esp:"
 })
-Tab:AddToggle({
-    Name = "Activate Esp",
-    Default = false,
+Tab:AddButton({
+    Name = "Activate Esp Script",
     Callback = function(esp)
        _G.FriendColor = Color3.fromRGB(0, 0, 255)
 _G.EnemyColor = Color3.fromRGB(255, 0, 0)
@@ -268,13 +267,14 @@ local Section = Tab:AddSection({
 })
 
 Tab:AddButton({
-    Name = "Activate Button Script",
-    Callback = function(aim)loadstring(game:HttpGet(("https://pastebin.com/raw/kzsW2w0v"), true))()
+    Name = "Activate aimbot",
+    Callback = function(aim) loadstring(game:HttpGet(("https://pastebin.com/raw/kzsW2w0v"), true))()
     end
 })
 
 local Tab = Window:MakeTab({
     Name = "Scripts for Dev",
+    Icon = "rbxassetid://4483345998",
 	PremiumOnly = false
 })
 
@@ -318,6 +318,7 @@ Tab:AddButton({
 
 local Tab = Window:MakeTab({
     Name = "Misc",
+    Icon = "rbxassetid://4483345998",
 	PremiumOnly = false
 })
 
@@ -351,20 +352,6 @@ Tab:AddButton({
 })
 
 local Section = Tab:AddSection({
-    Name = "Auto Click"
-})
-
-Tab:AddToggle({
-	Name = "Auto click",
-	Default = false,
-	Callback = function(Value)
-        getgenv().Clicking = Value
-       while getgenv().Clicking == true do wait(0.001)            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("AddSpeed"):FireServer();
-        end
-	end
-})
-
-local Section = Tab:AddSection({
     Name = "Characters:"
 })
 
@@ -375,48 +362,18 @@ Tab:AddButton({
     game:GetService("Players").LocalPlayer.Idled:connect(function()
     game:GetService("VirtualUser"):ClickButton2(Vector2.new())
 end)
-end})
-
-Tab:AddButton({
-    Name = "GodMode",
-    Callback = function()
-        game.Players.LocalPlayer.Character.Humanoid:Remove()
-Instance.new('Humanoid', game.Players.LocalPlayer.Character)
-game:GetService("Workspace")[game.Players.LocalPlayer.Name]:FindFirstChildOfClass(
-'Humanoid').HipHeight = 2
-	end    
+end
 })
 
+Tab:AddButton({
+    Name = "God Mode",
+    Callback = function(gdm)loadstring(game:HttpGet(("https://pastebin.com/raw/yraTMGwu"), true))()
+end
+})
 
-
-Tab:AddToggle({
+Tab:AddButton({
     Name = "NoClip",
-    Default = false,
-    Callback = function(nclp)
-        local Noclip = nil
-local Clip = nil
-
-function noclip()
-	Clip = false
-	local function Nocl()
-		if Clip == false and game.Players.LocalPlayer.Character ~= nil then
-			for _,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
-				if v:IsA('BasePart') and v.CanCollide and v.Name ~= floatName then
-					v.CanCollide = false
-				end
-			end
-		end
-		wait(0.21) 
-	end
-	Noclip = game:GetService('RunService').Stepped:Connect(Nocl)
-end
-
-function clip()
-	if Noclip then Noclip:Disconnect() end
-	Clip = true
-end
-
-noclip()
+    Callback = function(nclp)loadstring(game:HttpGet(("https://pastebin.com/raw/QS3hL6xJ"), true))()
 end
 })
 
@@ -430,6 +387,6 @@ Tab:AddLabel("The script has been created by Snowt")
 
 Tab:AddLabel("My Telegram channel: t.me/Snowt_Roblox_Scripts")
 
-Tab:AddLabel("The last update 04.06.2024")
+Tab:AddLabel("TESTING SCRIPT")
 
-Tab:AddLabel("This script - testing script")
+Tab:AddLabel("Version: TESTING SCRIPT")
