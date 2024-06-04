@@ -111,7 +111,16 @@ local Section = Tab:AddSection({
     Name = "Esp:"
 })
 
-function espEnemy()
+  
+Tab:AddToggle({
+    Name = "ESP",
+  Default = false,
+  Callback = function(bool)
+    getgenv().usingEsp = bool
+    if bool then
+      espEnemy()
+    end
+    function espEnemy()
   spawn(function()
     if getgenv().usingEsp == true then
       if not currentlyRespawning then
@@ -137,29 +146,9 @@ function espEnemy()
       end
     end
   end)
-end
-  
-Tab:AddToggle({
-    Name = "ESP Enemy",
-  Default = false,
-  Callback = function(bool)
-    getgenv().usingEsp = bool
-    if bool then
-      espEnemy()
     end
 end
 })
-
-:AddToggle({
-    Name = "ESP Enemy",
-  Default = false,
-  Callback = function(bool)
-    getgenv().usingEsp = bool
-    if bool then
-      espEnemy()
-    end
-  end
-  })
 
 local Section = Tab:AddSection({
     Name = "Aimbot:"
