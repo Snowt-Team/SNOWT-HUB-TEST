@@ -318,7 +318,7 @@ Tab:AddButton({
 
 local Tab = Window:MakeTab({
     Name = "Misc",
-	PremiumOnly = false
+    PremiumOnly = false
 })
 
 local Section = Tab:AddSection({
@@ -351,20 +351,6 @@ Tab:AddButton({
 })
 
 local Section = Tab:AddSection({
-    Name = "Auto Click"
-})
-
-Tab:AddToggle({
-	Name = "Auto click",
-	Default = false,
-	Callback = function(Value)
-        getgenv().Clicking = Value
-       while getgenv().Clicking == true do wait(0.001)            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("AddSpeed"):FireServer();
-        end
-	end
-})
-
-local Section = Tab:AddSection({
     Name = "Characters:"
 })
 
@@ -375,7 +361,8 @@ Tab:AddButton({
     game:GetService("Players").LocalPlayer.Idled:connect(function()
     game:GetService("VirtualUser"):ClickButton2(Vector2.new())
 end)
-end})
+end
+})
 
 Tab:AddButton({
     Name = "GodMode",
@@ -389,9 +376,8 @@ game:GetService("Workspace")[game.Players.LocalPlayer.Name]:FindFirstChildOfClas
 
 
 
-Tab:AddToggle({
+Tab:AddButton({
     Name = "NoClip",
-    Default = false,
     Callback = function(nclp)
         local Noclip = nil
 local Clip = nil
