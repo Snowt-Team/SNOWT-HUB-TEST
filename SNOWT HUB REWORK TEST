@@ -273,6 +273,32 @@ Tab:AddButton({
     end
 })
 
+local Section = Tab:AddSection({
+    Name = "Auto Click"
+})
+
+_G.autoClicking = false
+
+local function autoClick()
+    spawn(function()
+        while wait(0.00000000000000000001) do
+            if _G.autoClicking then
+                game:GetService("ReplicatedStorage").Packages.Knit.Services.ClickService.RF.Click:InvokeServer()
+game:GetService("ReplicatedStorage").Packages.Knit.Services.ClickService.RF.RedeemClickReward:InvokeServer()
+                wait(0.00000000000000000001)
+            end
+        end
+    end)
+end
+Tab:AddToggle({
+    Name = "Auto Click",
+    Default = false,
+    Callback = function(bool)
+_G.autoClicking = bool
+    autoClick()
+end
+})
+
 local Tab = Window:MakeTab({
     Name = "Characters"
 })
@@ -303,38 +329,26 @@ end
 
 local connection
 
+local function noclip()
+	for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+		if v:IsA"Part" then
+			v.CanCollide = false0
+		end
+	end
+end
+
 Tab:AddToggle({
-	Name = "Noclip",
+	Name = "Noclip (jump after disabling)",
 	Default = false,
-	Callback = function(Nclp)
-    if Nclp then
-        connection = game:GetService("RunService").Stepped:Connect(function()
-            game.Players.LocalPlayer.Character.Head.CanCollide = false
-            game.Players.LocalPlayer.Character.Torso.CanCollide = false
-        end)
-    else
-        game.Players.LocalPlayer.Character.Head.CanCollide = true
-        game.Players.LocalPlayer.Character.Torso.CanCollide = true
-    end
-	end    
+	Callback = function(v)
+		_G.Noclip = v
+	end
 })
 
 Tab:AddButton({
     Name = "Invisibility",
     Callback = function(inv)
-        local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:WaitForChild("Humanoid")
-
-local function PTransparency(transparency)
-    for _, part in ipairs(character:GetDescendants()) do
-        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
-            part.Transparency = transparency
-        end
-    end
-end
-
-PTransparency(1)
+        
 end
 })
 
