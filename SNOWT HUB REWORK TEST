@@ -327,22 +327,28 @@ Tab:AddButton({
 end
 })
 
-local connection
-
-local function noclip()
-	for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-		if v:IsA"Part" then
-			v.CanCollide = false0
-		end
-	end
-end
-
 Tab:AddToggle({
-	Name = "Noclip (jump after disabling)",
+	Name = "Noclip",
 	Default = false,
-	Callback = function(v)
-		_G.Noclip = v
-	end
+	Callback = function(nclp)
+	    if nclp == false then 
+	    Clipon = true
+	    Stepped = game:GetService("RunService").Stepped:Connect(function(b)
+            if not Clipon == false then
+                for a, b in pairs(Workspace:GetChildren()) do
+                if b.Name == Plr.Name then
+                for i, v in pairs(Workspace[Plr.Name]:GetChildren()) do
+                if v:IsA("BasePart") then
+                v.CanCollide = false
+                end end end end
+            else
+                Stepped:Disconnect()
+            end
+	    end)
+    else
+        Clipon = false
+	    end
+end
 })
 
 Tab:AddButton({
