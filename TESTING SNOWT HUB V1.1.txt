@@ -1,4 +1,4 @@
-local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+Get(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 
 local Window = OrionLib:MakeWindow({Name = "SNOWT HUB [REWRITEN]", HidePremium = false, SaveConfig = false, ConfigFolder = "Snowt Scripts"})
 
@@ -29,8 +29,7 @@ Tab:AddTextbox({
 })
 
 Tab:AddButton({
-    Name = "Default WalkSpeed",
-    Callback = function(defs)
+    Name = "
         game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
     end
 })
