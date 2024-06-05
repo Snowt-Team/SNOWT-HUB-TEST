@@ -327,6 +327,12 @@ Tab:AddButton({
 end
 })
 
+local Workspace = game:GetService("Workspace")
+local CoreGui = game:GetService("CoreGui")
+local Players = game:GetService("Players")
+local Plr = Players.LocalPlayer
+local Clipon = false
+
 Tab:AddToggle({
 	Name = "Noclip",
 	Default = false,
