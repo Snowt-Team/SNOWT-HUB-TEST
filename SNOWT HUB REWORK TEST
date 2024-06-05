@@ -327,7 +327,15 @@ Tab:AddButton({
 end
 })
 
-local Noclip = nil
+
+
+Tab:AddToggle({
+	Name = "Noclip",
+	Default = false,
+	Callback = function(nclp)
+	    Clip = nclp
+	    noclip()
+	local Noclip = nil
 local Clip = nil
 
 function noclip()
@@ -351,13 +359,6 @@ function clip()
 end
 
 noclip() 
-
-Tab:AddToggle({
-	Name = "Noclip",
-	Default = false,
-	Callback = function(nclp)
-	    Clip = nclp
-	    noclip()
 end
 })
 
