@@ -331,9 +331,9 @@ Tab:AddToggle({
 	Name = "Noclip",
 	Default = false,
 	Callback = function(nclp)
-	    if nclp == false then 
+	    if nclp == false then
 	    Clipon = true
-	    Stepped = game:GetService("RunService").Stepped:Connect(function(b)
+	    Stepped = game:GetService("RunService").Stepped:Connect(function()
             if not Clipon == false then
                 for a, b in pairs(Workspace:GetChildren()) do
                 if b.Name == Plr.Name then
