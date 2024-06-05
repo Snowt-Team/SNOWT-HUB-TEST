@@ -328,50 +328,64 @@ Tab:AddToggle({
     end
 })
 
-local function EnableInvis()
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:WaitForChild("Humanoid")
+local destroy_almost_all_body = false
+local remove_accessory = false
 
-local function PTransparency(transparency)
-    for _, part in ipairs(character:GetDescendants()) do
-        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
-            part.Transparency = transparency
-        end
-    end
-end
-end
+	local function destroy_all()
+		for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+			if v.Name ~= "HumanoidRootPart" and v:IsA("MeshPart") then	
+				for i, vv in v:GetChildren() do
+					if vv:IsA("Motor6D") and v.Name ~= "Head" then
+						vv:Destroy()
+					end
+				end
 
-PTransparency(1)
-
-
-local function DisableInvis()
-    local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:WaitForChild("Humanoid")
-
-local function PTransparency(transparency)
-    for _, part in ipairs(character:GetDescendants()) do
-        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
-            part.Transparency = transparency
-        end
-    end
-end
-end
-
-PTransparency(100)
+				if v.Name == "LowerTorso" then
+					v:Destroy()
+				end
+			end
+		end
+	end
+	
+	local function remove_acessory_sc()
+		for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do 
+			if v:IsA("Accessory") then
+				for i, vv in pairs(v:GetChildren()) do
+					if vv.Name == "Handle" then
+						for i, weld in pairs(vv:GetChildren()) do
+							if weld:IsA("Weld") then
+								weld:Destroy()
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+	
+	invisible()
+	
+	task.wait(1)
+	
+	if destroy_almost_all_body then
+		destroy_all()
+	end
+	
+	if remove_accessory then
+		remove_acessory_sc()
+	end
 
 Tab:AddToggle({
-    Name = "Invisible On/Off",
+    Name = "invisible On/Off",
     Default = false,
     Callback = function(invisib)
-        InvisibleEnabled = not InvisibleEnabled
-        if not InvisibleEnabled then
-            EnableInvis()
+        InvisEnabled = not InvisEnabled
+        if not InvisEnabled then
+            destroy_all()
         else
-            DisableInvis()
+            remove_acessory_sc()
         end
-    end
+end
 })
 
 local Tab = Window:MakeTab({
