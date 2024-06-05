@@ -58,10 +58,12 @@ Tab:AddButton({
 Tab:AddButton({
     Name = "Inf. Jumps",
     Callback = function(infj)
-        local InfinityJumpEnabled = true
-        game:GetService("UserInputService").JumpRequest:connect(function() 	if InfiniteJumpEnabled then
-        game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
-        end end)
+        local infjmp = true
+game:GetService("UserInputService").jumpRequest:Connect(function()
+    if infjmp then
+        game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass"Humanoid":ChangeState("Jumping")
+    end
+end)
 end
 })
 
@@ -327,39 +329,39 @@ Tab:AddButton({
 end
 })
 
+local function EnableNoClip()
+    local LocalPlayerCharacter = game.Players.LocalPlayer.Character
+		LocalPlayerCharacter.Head.CanCollide = false
+		LocalPlayerCharacter.LowerTorso.CanCollide = false
+		LocalPlayerCharacter.UpperTorso.CanCollide = false
+		LocalPlayerCharacter.HumanoidRootPart.CanCollide = false
+		if LocalPlayerCharacter:FindFirstChild("Badge") then
+			LocalPlayerCharacter.Badge.CanCollide = false
+		end
+	end
 
+local function DisableNoClip()
+    local LocalPlayerCharacter = game.Players.LocalPlayer.Character
+		LocalPlayerCharacter.Head.CanCollide = true
+		LocalPlayerCharacter.LowerTorso.CanCollide = true
+		LocalPlayerCharacter.UpperTorso.CanCollide = true
+		LocalPlayerCharacter.HumanoidRootPart.CanCollide = true
+		if LocalPlayerCharacter:FindFirstChild("Badge") then
+			LocalPlayerCharacter.Badge.CanCollide = true
+		end
+	end
 
 Tab:AddToggle({
-	Name = "Noclip",
-	Default = false,
-	Callback = function(nclp)
-	    Clip = nclp
-	    noclip()
-	local Noclip = nil
-local Clip = nil
-
-function noclip()
-	Clip = false
-	local function Nocl()
-		if Clip == false and game.Players.LocalPlayer.Character ~= nil then
-			for _,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
-				if v:IsA('BasePart') and v.CanCollide and v.Name ~= floatName then
-					v.CanCollide = false
-				end
-			end
-		end
-		wait(0.21) 
-	end
-	Noclip = game:GetService('RunService').Stepped:Connect(Nocl)
-end
-
-function clip()
-	if Noclip then Noclip:Disconnect() end
-	Clip = true
-end
-
-noclip() 
-end
+    Name = "Noclip",
+    Default = false,
+    Callback = function(svhat)
+        NoClipEnabled = not NoClipEnabled
+        if not NoClipEnabled then
+            EnableNoClip()
+        else
+            DisableNoClip()
+        end
+    end
 })
 
 Tab:AddButton({
