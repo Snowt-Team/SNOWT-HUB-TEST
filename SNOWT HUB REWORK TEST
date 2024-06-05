@@ -156,10 +156,42 @@ local Section = Tab:AddSection({
     Name = "Aimbot:"
 })
 
-Tab:AddButton({
-    Name = "Activate aimbot",
-    Callback = function(aim) loadstring(game:HttpGet(("https://pastebin.com/raw/kzsW2w0v"), true))()
+Aimbot = {
+    FreeForAll = false,
+    WallCheck = false,
+    Enabled = false,
+    FOV = 250
+}
+
+
+local function AimAtPlayer(player)
+    local myCharacter = game.Players.LocalPlayer.Character
+    local targetCharacter = player.Character
+    local aimPart = targetCharacter:FindFirstChild(AimPart)
+
+    if aimPart then
+        local camera = workspace.CurrentCamera
+        local lookVector = (aimPart.Position - camera.CFrame.Position).Unit
+        local targetRotation = CFrame.lookAt(Vector3.new(), lookVector)
+        camera.CFrame = CFrame.new(camera.CFrame.Position, camera.CFrame.Position + targetRotation.LookVector)
     end
+end
+
+ local function UpdateAimbot()
+    if AimbotEnabled then
+        local closestPlayer = GetClosestPlayer()
+        if closestPlayer then
+            AimAtPlayer(closestPlayer)
+        end
+    end
+end
+
+Tab:AddToggle({
+    Name = "AimBot On/Off",
+    Default = false,
+    Callback = function(Value)
+    Aimbot.Enabled = Value
+    end    
 })
 
 local Tab = Window:MakeTab({
@@ -274,8 +306,8 @@ local connection
 Tab:AddToggle({
 	Name = "Noclip",
 	Default = false,
-	Callback = function(Value)
-    if Value then
+	Callback = function(Nclp)
+    if Nclp then
         connection = game:GetService("RunService").Stepped:Connect(function()
             game.Players.LocalPlayer.Character.Head.CanCollide = false
             game.Players.LocalPlayer.Character.Torso.CanCollide = false
@@ -291,10 +323,40 @@ Tab:AddToggle({
 	end    
 })
 
-Tab:AddButton({
+Tab:AddToggle({
     Name = "Invisibility",
+    Default = false,
     Callback = function(inv)
-        local offset = 1100 local invisible = game.Players.LocalPlayer local grips = {} local heldTool local gripChanged local handle local weld function setDisplayDistance(distance) for _, player in pairs(game.Players:GetPlayers()) do if player.Character and player.Character:FindFirstChildWhichIsA("Humanoid") then player.Character:FindFirstChildWhichIsA("Humanoid").NameDisplayDistance = distance player.Character:FindFirstChildWhichIsA("Humanoid").HealthDisplayDistance = distance end end end local tool = Instance.new("Tool", game.Players.LocalPlayer.Backpack) tool.Name = "Invisible" tool.RequiresHandle = false tool.CanBeDropped = false tool.Equipped:Connect( function() wait() if not invisible then invisible = true tool.Name = "Enabled Invisible" if handle then handle:Destroy() end if weld then weld:Destroy() end handle = Instance.new("Part", workspace) handle.Name = "Handle" handle.Transparency = 1 handle.CanCollide = false handle.Size = Vector3.new(2, 1, 1) weld = Instance.new("Weld", handle) weld.Part0 = handle weld.Part1 = game.Players.LocalPlayer.Character.HumanoidRootPart weld.C0 = CFrame.new(0, offset - 1.5, 0) setDisplayDistance(offset + 100) workspace.CurrentCamera.CameraSubject = handle game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, offset, 0) game.Players.LocalPlayer.Character.Humanoid.HipHeight = offset game.Players.LocalPlayer.Character.Humanoid:ChangeState(11) for _, child in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do if child:IsA("Tool") and child ~= tool then grips[child] = child.Grip end end elseif invisible then invisible = false tool.Name = "Disabled Invisible" if handle then handle:Destroy() end if weld then weld:Destroy() end for _, child in pairs(game.Players.LocalPlayer.Character:GetChildren()) do if child:IsA("Tool") then child.Parent = game.Players.LocalPlayer.Backpack end end for tool, grip in pairs(grips) do if tool then tool.Grip = grip end end heldTool = nil setDisplayDistance(100) workspace.CurrentCamera.CameraSubject = game.Players.LocalPlayer.Character.Humanoid game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, -offset, 0) game.Players.LocalPlayer.Character.Humanoid.HipHeight = 0 end tool.Parent = game.Players.LocalPlayer.Backpack end ) game.Players.LocalPlayer.Character.ChildAdded:Connect( function(child) wait() if invisible and child:IsA("Tool") and child ~= heldTool and child ~= tool then heldTool = child local lastGrip = heldTool.Grip if not grips[heldTool] then grips[heldTool] = lastGrip end for _, track in pairs(game.Players.LocalPlayer.Character.Humanoid:GetPlayingAnimationTracks()) do track:Stop() end game.Players.LocalPlayer.Character.Animate.Disabled = true heldTool.Grip = heldTool.Grip * (CFrame.new(0, offset - 1.5, 1.5) * CFrame.Angles(math.rad(-90), 0, 0)) heldTool.Parent = game.Players.LocalPlayer.Backpack heldTool.Parent = game.Players.LocalPlayer.Character if gripChanged then gripChanged:Disconnect() end gripChanged = heldTool:GetPropertyChangedSignal("Grip"):Connect( function() wait() if not invisible then gripChanged:Disconnect() end if heldTool.Grip ~= lastGrip then lastGrip = heldTool.Grip * (CFrame.new(0, offset - 1.5, 1.5) * CFrame.Angles(math.rad(-90), 0, 0)) heldTool.Grip = lastGrip heldTool.Parent = game.Players.LocalPlayer.Backpack heldTool.Parent = game.Players.LocalPlayer.Character end end ) end end )
+        if inv then
+            local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+local function PTransparency(transparency)
+    for _, part in ipairs(character:GetDescendants()) do
+        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+            part.Transparency = transparency
+        end
+    end
+end
+
+PTransparency(0)
+else
+    local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+local function PTransparency(transparency)
+    for _, part in ipairs(character:GetDescendants()) do
+        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+            part.Transparency = transparency
+        end
+    end
+end
+
+PTransparency(1)
+
+end
 end
 })
 
