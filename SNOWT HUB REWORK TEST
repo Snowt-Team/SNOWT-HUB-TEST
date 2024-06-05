@@ -313,36 +313,16 @@ Tab:AddToggle({
             game.Players.LocalPlayer.Character.Torso.CanCollide = false
         end)
     else
-        if connection then
-            connection:Disconnect()
-            connection = nil
-        end
         game.Players.LocalPlayer.Character.Head.CanCollide = true
         game.Players.LocalPlayer.Character.Torso.CanCollide = true
     end
 	end    
 })
 
-Tab:AddToggle({
+Tab:AddButton({
     Name = "Invisibility",
-    Default = false,
     Callback = function(inv)
-        if inv then
-            local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:WaitForChild("Humanoid")
-
-local function PTransparency(transparency)
-    for _, part in ipairs(character:GetDescendants()) do
-        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
-            part.Transparency = transparency
-        end
-    end
-end
-
-PTransparency(0)
-else
-    local player = game.Players.LocalPlayer
+        local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local humanoid = character:WaitForChild("Humanoid")
 
@@ -355,8 +335,6 @@ local function PTransparency(transparency)
 end
 
 PTransparency(1)
-
-end
 end
 })
 
