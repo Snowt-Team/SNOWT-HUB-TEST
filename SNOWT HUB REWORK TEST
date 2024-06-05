@@ -158,43 +158,7 @@ local Section = Tab:AddSection({
     Name = "Aimbot:"
 })
 
-Aimbot = {
-    FreeForAll = false,
-    WallCheck = false,
-    Enabled = false,
-    FOV = 250
-}
 
-
-local function AimAtPlayer(player)
-    local myCharacter = game.Players.LocalPlayer.Character
-    local targetCharacter = player.Character
-    local aimPart = targetCharacter:FindFirstChild(AimPart)
-
-    if aimPart then
-        local camera = workspace.CurrentCamera
-        local lookVector = (aimPart.Position - camera.CFrame.Position).Unit
-        local targetRotation = CFrame.lookAt(Vector3.new(), lookVector)
-        camera.CFrame = CFrame.new(camera.CFrame.Position, camera.CFrame.Position + targetRotation.LookVector)
-    end
-end
-
- local function UpdateAimbot()
-    if AimbotEnabled then
-        local closestPlayer = GetClosestPlayer()
-        if closestPlayer then
-            AimAtPlayer(closestPlayer)
-        end
-    end
-end
-
-Tab:AddToggle({
-    Name = "AimBot On/Off",
-    Default = false,
-    Callback = function(Value)
-    Aimbot.Enabled = Value
-    end    
-})
 
 local Tab = Window:MakeTab({
     Name = "Scripts for Dev",
@@ -364,11 +328,50 @@ Tab:AddToggle({
     end
 })
 
-Tab:AddButton({
-    Name = "Invisibility",
-    Callback = function(inv)
-        
+local function EnableInvis()
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+local function PTransparency(transparency)
+    for _, part in ipairs(character:GetDescendants()) do
+        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+            part.Transparency = transparency
+        end
+    end
 end
+end
+
+PTransparency(1)
+
+
+local function DisableInvis()
+    local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+local function PTransparency(transparency)
+    for _, part in ipairs(character:GetDescendants()) do
+        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+            part.Transparency = transparency
+        end
+    end
+end
+end
+
+PTransparency(100)
+
+Tab:AddToggle({
+    Name = "Invisible On/Off",
+    Default = false,
+    Callback = function(invisib)
+        InvisibleEnabled = not InvisibleEnabled
+        if not InvisibleEnabled then
+            EnableInvis()
+        else
+            DisableInvis()
+        end
+    end
 })
 
 local Tab = Window:MakeTab({
