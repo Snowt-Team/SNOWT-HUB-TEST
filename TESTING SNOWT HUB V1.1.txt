@@ -158,43 +158,7 @@ local Section = Tab:AddSection({
     Name = "Aimbot:"
 })
 
-Aimbot = {
-    FreeForAll = false,
-    WallCheck = false,
-    Enabled = false,
-    FOV = 250
-}
 
-
-local function AimAtPlayer(player)
-    local myCharacter = game.Players.LocalPlayer.Character
-    local targetCharacter = player.Character
-    local aimPart = targetCharacter:FindFirstChild(AimPart)
-
-    if aimPart then
-        local camera = workspace.CurrentCamera
-        local lookVector = (aimPart.Position - camera.CFrame.Position).Unit
-        local targetRotation = CFrame.lookAt(Vector3.new(), lookVector)
-        camera.CFrame = CFrame.new(camera.CFrame.Position, camera.CFrame.Position + targetRotation.LookVector)
-    end
-end
-
- local function UpdateAimbot()
-    if AimbotEnabled then
-        local closestPlayer = GetClosestPlayer()
-        if closestPlayer then
-            AimAtPlayer(closestPlayer)
-        end
-    end
-end
-
-Tab:AddToggle({
-    Name = "AimBot On/Off",
-    Default = false,
-    Callback = function(Value)
-    Aimbot.Enabled = Value
-    end    
-})
 
 local Tab = Window:MakeTab({
     Name = "Scripts for Dev",
@@ -301,10 +265,6 @@ _G.autoClicking = bool
 end
 })
 
-local Tab = Window:MakeTab({
-    Name = "Characters"
-})
-
 local Section = Tab:AddSection({
     Name = "Anti AFK"
 })
@@ -319,14 +279,22 @@ end)
 end
 })
 
+local Tab = Window:MakeTab({
+    Name = "Characters"
+})
+
 local Section = Tab:AddSection({
-    Name = "God Mode/Invisibility/NoClip"
+    Name = "God Mode"
 })
 
 Tab:AddButton({
     Name = "God Mode",
     Callback = function(gdm)loadstring(game:HttpGet(("https://pastebin.com/raw/yraTMGwu"), true))()
 end
+})
+
+local Section = Tab:AddSection({
+    Name = "NoClip"
 })
 
 local function EnableNoClip()
@@ -364,12 +332,10 @@ Tab:AddToggle({
     end
 })
 
-Tab:AddButton({
-    Name = "Invisibility",
-    Callback = function(inv)
-        
-end
+local Section = Tab:AddSection({
+    Name = "Invisibility"
 })
+
 
 local Tab = Window:MakeTab({
     Name = "Credit",
