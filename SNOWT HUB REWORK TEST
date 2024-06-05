@@ -345,9 +345,10 @@ Tab:AddToggle({
                 Stepped:Disconnect()
             end
 	    end)
-    else
+	elseif 
+        Nclp == true then
         Clipon = false
-	    end
+        end
 end
 })
 
