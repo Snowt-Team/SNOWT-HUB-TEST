@@ -297,23 +297,44 @@ local Section = Tab:AddSection({
     Name = "NoClip"
 })
 
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+local function PTransparencyOn(transparency)
+    for _, part in ipairs(character:GetDescendants()) do
+        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+            part.Transparency = transparency
+        end
+    end
+end
+
+
+PTransparencyOn(1)
+
+local function PTransparencyOff(transparency)
+    for _, part in ipairs(character:GetDescendants()) do
+        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+            part.Transparency = transparency
+        end
+    end
+end
+
+
+PTransparencyOff(0)
+
 Tab:AddToggle({
-		Name = "Noclip",
-		Callback = function(State)
-			getgenv().Noclipping = State
-			if Noclipping == true then
-				spawn(function()
-					while Noclipping == true do
-						Noclip(false)
-						task.wait(.05)
-					end
-				end)
-			end
-			if Noclipping == false then
-				Noclip(true)
-			end
-		end
-	})
+    Name = "NoClip",
+    Default = false,
+    Callback = function(nclp)
+            NoClipOn = not NoClipOn
+        if not NoClipOn then
+            PTransparencyOn(transparency)
+        else
+            PTransparencyOff(transparency)
+        end
+end
+})
 
 local Section = Tab:AddSection({
     Name = "Invisibility"
