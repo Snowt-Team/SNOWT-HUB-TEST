@@ -297,220 +297,26 @@ local Section = Tab:AddSection({
     Name = "NoClip"
 })
 
-local function EnableNoClip()
-    local LocalPlayerCharacter = game.Players.LocalPlayer.Character
-		LocalPlayerCharacter.Head.CanCollide = false
-		LocalPlayerCharacter.LowerTorso.CanCollide = false
-		LocalPlayerCharacter.UpperTorso.CanCollide = false
-		LocalPlayerCharacter.HumanoidRootPart.CanCollide = false
-		if LocalPlayerCharacter:FindFirstChild("Badge") then
-			LocalPlayerCharacter.Badge.CanCollide = false
-		end
-	end
-
-local function DisableNoClip()
-    local LocalPlayerCharacter = game.Players.LocalPlayer.Character
-		LocalPlayerCharacter.Head.CanCollide = true
-		LocalPlayerCharacter.LowerTorso.CanCollide = true
-		LocalPlayerCharacter.UpperTorso.CanCollide = true
-		LocalPlayerCharacter.HumanoidRootPart.CanCollide = true
-		if LocalPlayerCharacter:FindFirstChild("Badge") then
-			LocalPlayerCharacter.Badge.CanCollide = true
-		end
-	end
-
 Tab:AddToggle({
-    Name = "Noclip",
-    Default = false,
-    Callback = function(svhat)
-        NoClipEnabled = not NoClipEnabled
-        if not NoClipEnabled then
-            EnableNoClip()
-        else
-            DisableNoClip()
-        end
-    end
-})
+		Name = "Noclip",
+		Callback = function(State)
+			getgenv().Noclipping = State
+			if Noclipping == true then
+				spawn(function()
+					while Noclipping == true do
+						Noclip(false)
+						task.wait(.05)
+					end
+				end)
+			end
+			if Noclipping == false then
+				Noclip(true)
+			end
+		end
+	})
 
 local Section = Tab:AddSection({
     Name = "Invisibility"
-})
-
-local ScriptStarted = false
-local Transparency = true
-local NoClip = true
-
-local Player = game:GetService("Players").LocalPlayer
-local RealCharacter = Player.Character or Player.CharacterAdded:Wait()
- 
-local IsInvisible = false
- 
-RealCharacter.Archivable = true
-local FakeCharacter = RealCharacter:Clone()
-local Part
-Part = Instance.new("Part", workspace)
-Part.Anchored = true
-Part.Size = Vector3.new(200, 1, 200)
-Part.CFrame = CFrame.new(0, 5000, 999999999999999999) 
-
-Part.CanCollide = true
-FakeCharacter.Parent = workspace
-FakeCharacter.HumanoidRootPart.CFrame = Part.CFrame * CFrame.new(0, 5, 0)
- 
-for i, v in pairs(RealCharacter:GetChildren()) do
-  if v:IsA("LocalScript") then
-      local clone = v:Clone()
-      clone.Disabled = true
-      clone.Parent = FakeCharacter
-  end
-end
-if Transparency then
-  for i, v in pairs(FakeCharacter:GetDescendants()) do
-      if v:IsA("BasePart") then
-          v.Transparency = 0.7
-      end
-  end
-end
-local CanInvis = true
-function RealCharacterDied()
-  CanInvis = false
-  RealCharacter:Destroy()
-  RealCharacter = Player.Character
-  CanInvis = true
-  isinvisible = false
-  FakeCharacter:Destroy()
-  workspace.CurrentCamera.CameraSubject = RealCharacter.Humanoid
- 
-  RealCharacter.Archivable = true
-  FakeCharacter = RealCharacter:Clone()
-  Part:Destroy()
-  Part = Instance.new("Part", workspace)
-  Part.Anchored = true
-  Part.Size = Vector3.new(200, 1, 200)
-  Part.CFrame = CFrame.new(9999, 9999, 9999)
-  Part.CanCollide = true
-  FakeCharacter.Parent = workspace
-  FakeCharacter.HumanoidRootPart.CFrame = Part.CFrame * CFrame.new(0, 5, 0)
- 
-  for i, v in pairs(RealCharacter:GetChildren()) do
-      if v:IsA("LocalScript") then
-          local clone = v:Clone()
-          clone.Disabled = true
-          clone.Parent = FakeCharacter
-      end
-  end
-  if Transparency then
-      for i, v in pairs(FakeCharacter:GetDescendants()) do
-          if v:IsA("BasePart") then
-              v.Transparency = 0.7
-          end
-      end
-  end
- RealCharacter.Humanoid.Died:Connect(function()
- RealCharacter:Destroy()
- FakeCharacter:Destroy()
- end)
- Player.CharacterAppearanceLoaded:Connect(RealCharacterDied)
-end
-RealCharacter.Humanoid.Died:Connect(function()
- RealCharacter:Destroy()
- FakeCharacter:Destroy()
- end)
-Player.CharacterAppearanceLoaded:Connect(RealCharacterDied)
-local PseudoAnchor
-game:GetService "RunService".RenderStepped:Connect(
-  function()
-      if PseudoAnchor ~= nil then
-          PseudoAnchor.CFrame = Part.CFrame * CFrame.new(0, 5, 0)
-      end
-       if NoClip then
-      FakeCharacter.Humanoid:ChangeState(11)
-       end
-  end
-)
- 
-PseudoAnchor = FakeCharacter.HumanoidRootPart
-local function EnableInvisible()
-  if IsInvisible == false then
-      local StoredCF = RealCharacter.HumanoidRootPart.CFrame
-      RealCharacter.HumanoidRootPart.CFrame = FakeCharacter.HumanoidRootPart.CFrame
-      FakeCharacter.HumanoidRootPart.CFrame = StoredCF
-      RealCharacter.Humanoid:UnequipTools()
-      Player.Character = FakeCharacter
-      workspace.CurrentCamera.CameraSubject = FakeCharacter.Humanoid
-      PseudoAnchor = RealCharacter.HumanoidRootPart
-      for i, v in pairs(FakeCharacter:GetChildren()) do
-          if v:IsA("LocalScript") then
-              v.Disabled = false
-          end
-      end
- 
-      IsInvisible = true
-  else
-      local StoredCF = FakeCharacter.HumanoidRootPart.CFrame
-      FakeCharacter.HumanoidRootPart.CFrame = RealCharacter.HumanoidRootPart.CFrame
- 
-      RealCharacter.HumanoidRootPart.CFrame = StoredCF
- 
-      FakeCharacter.Humanoid:UnequipTools()
-      Player.Character = RealCharacter
-      workspace.CurrentCamera.CameraSubject = RealCharacter.Humanoid
-      PseudoAnchor = FakeCharacter.HumanoidRootPart
-      for i, v in pairs(FakeCharacter:GetChildren()) do
-          if v:IsA("LocalScript") then
-              v.Disabled = true
-          end
-      end
-      IsInvisible = false
-  end
-end
-
-local function DisableInvisible()
-      if IsInvisible == true then
-      local StoredCF = RealCharacter.HumanoidRootPart.CFrame
-      RealCharacter.HumanoidRootPart.CFrame = FakeCharacter.HumanoidRootPart.CFrame
-      FakeCharacter.HumanoidRootPart.CFrame = StoredCF
-      RealCharacter.Humanoid:UnequipTools()
-      Player.Character = FakeCharacter
-      workspace.CurrentCamera.CameraSubject = FakeCharacter.Humanoid
-      PseudoAnchor = RealCharacter.HumanoidRootPart
-      for i, v in pairs(FakeCharacter:GetChildren()) do
-          if v:IsA("LocalScript") then
-              v.Disabled = true
-          end
-      end
- 
-      IsInvisible = false
-  else
-      local StoredCF = FakeCharacter.HumanoidRootPart.CFrame
-      FakeCharacter.HumanoidRootPart.CFrame = RealCharacter.HumanoidRootPart.CFrame
- 
-      RealCharacter.HumanoidRootPart.CFrame = StoredCF
-
-      FakeCharacter.Humanoid:UnequipTools()
-      Player.Character = RealCharacter
-      workspace.CurrentCamera.CameraSubject = RealCharacter.Humanoid
-      PseudoAnchor = FakeCharacter.HumanoidRootPart
-      for i, v in pairs(FakeCharacter:GetChildren()) do
-          if v:IsA("LocalScript") then
-              v.Disabled = false
-          end
-      end
-      IsInvisible = true
-  end
-end
-
-Tab:AddToggle({
-    Name = "Invisible on/off",
-    Default = false,
-    Callback = function(invis)
-        InvisibleEnabled = not InvisibleEnabled 
-        if not InvisibleEnabled then
-            EnableInvisible()
-        else
-            DisableInvisible()
-        end
-end
 })
 
 local Tab = Window:MakeTab({
