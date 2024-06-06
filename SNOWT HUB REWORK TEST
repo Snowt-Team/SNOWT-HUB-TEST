@@ -240,7 +240,7 @@ Tab:AddButton({
 })
 
 local Section = Tab:AddSection({
-    Name = "Auto Click"
+    Name = "Auto Click:"
 })
 
 _G.autoClicking = false
@@ -266,7 +266,7 @@ end
 })
 
 local Section = Tab:AddSection({
-    Name = "Anti AFK"
+    Name = "Anti AFK:"
 })
 
 Tab:AddButton({
@@ -284,7 +284,7 @@ local Tab = Window:MakeTab({
 })
 
 local Section = Tab:AddSection({
-    Name = "God Mode"
+    Name = "God Mode:"
 })
 
 Tab:AddButton({
@@ -294,7 +294,41 @@ end
 })
 
 local Section = Tab:AddSection({
-    Name = "NoClip"
+    Name = "NoClip:"
+})
+
+local function EnableNoclip()
+	for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+		if v:IsA"Part" then
+			v.CanCollide = false
+		end
+	end
+end
+
+local function DisableNoclip()
+    for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+		if v:IsA"Part" then
+			v.CanCollide = true
+		end
+	end
+end
+
+    
+Tab:AddToggle({
+	Name = "Noclip",
+	Default = false,
+	Callback = function(Nclp)
+	        NoClipOn = not NoClipOn
+	    if not NoClipOn then
+	        EnableNoclip()
+	    else
+	        DisableNoclip()
+	    end
+end
+})
+
+local Section = Tab:AddSection({
+    Name = "Invisibility:"
 })
 
 local player = game.Players.LocalPlayer
@@ -324,20 +358,16 @@ end
 PTransparencyOff(0)
 
 Tab:AddToggle({
-    Name = "NoClip",
+    Name = "Invisible",
     Default = false,
-    Callback = function(nclp)
-            NoClipOn = not NoClipOn
-        if not NoClipOn then
-            PTransparencyOn(transparency)
+    Callback = function(invis)
+            InvisOn = not InvisOn
+        if not InvisOn then
+            PTransparencyOn(1)
         else
-            PTransparencyOff(transparency)
+            PTransparencyOff(0)
         end
 end
-})
-
-local Section = Tab:AddSection({
-    Name = "Invisibility"
 })
 
 local Tab = Window:MakeTab({
