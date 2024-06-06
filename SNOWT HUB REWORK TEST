@@ -4,7 +4,7 @@ local Window = OrionLib:MakeWindow({Name = "SNOWT HUB [REWRITEN]", HidePremium =
 
 OrionLib:MakeNotification({
 	Name = "By Snowt Team",
-	Content = "TEST SCRIPT.",
+	Content = "My First script",
 	Image = "rbxassetid://4483345998",
 	Time = 5
 })
@@ -28,6 +28,8 @@ Tab:AddTextbox({
 	end	  
 })
 
+Tab:AddLabel("Эта функция делает скорость базовой для всех режимов.")
+
 Tab:AddButton({
     Name = "Default WalkSpeed",
     Callback = function(defs)
@@ -48,12 +50,16 @@ Tab:AddTextbox({
     end
 })
 
+Tab:AddLabel("Меняет силу прыжка до базового значения.")
+
 Tab:AddButton({
     Name = "Default JumpHeight",
     Callback = function(defj)
         game.Players.LocalPlayer.Character.Humanoid = 7
     end
 })
+
+Tab:AddLabel("Делает ваши прыжки бесконечными")
 
 Tab:AddButton({
     Name = "Inf. Jumps",
@@ -71,15 +77,25 @@ local Section = Tab:AddSection({
     Name = "Fly:"
 })
 
+Tab:AddLabel("Загружает GUI с полетом.")
+
 Tab:AddButton({
     Name = "Activate Fly",
     Callback = function(fly)loadstring(game:HttpGet(("https://pastebin.com/raw/SLTqw4r4"), true))()
     end
 })
 
-local Section = Tab:AddSection({
-    Name = "Teleport:"
+local Tab = Window:MakeTab({
+    Name = "Teleport",
+    Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
 })
+
+local Section = Tab:AddSection({
+    Name = "Teleport function:"
+})
+
+Tab:AddParagraph("Важно!", "Данная функция позволяет вам телепортироваться к любому игроку, чтобы обновить список игроков, вам нужно переинжектить скрипт.")
 
 local plrs = game.Players
 
@@ -110,12 +126,16 @@ Tab:AddDropdown({
 })
 
 local Tab = Window:MakeTab({
-    Name = "Visual"
+    Name = "Visual",
+    Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
 })
 
 local Section = Tab:AddSection({
     Name = "Esp:"
 })
+
+Tab:AddLabel("Включает/выключает Esp Box.")
 
 local function ShowESP()
     for _, player in ipairs(game.Players:GetPlayers()) do
@@ -158,13 +178,21 @@ local Section = Tab:AddSection({
     Name = "Aimbot:"
 })
 
+Tab:AddLabel("Загружает GUI с AimBot.")
 
+Tab:AddButton({
+    Name = "AimBot GUI",
+    Callback = function(aim)loadstring(game:HttpGet(("https://pastebin.com/raw/kzsW2w0v"), true))()
+    end
+})
 
 local Tab = Window:MakeTab({
     Name = "Scripts for Dev",
     Icon = "rbxassetid://4483345998",
 	PremiumOnly = false
 })
+
+Tab:AddParagraph("Важно!", "Данные функции активируют выбранный вами explorer.")
 
 local Section = Tab:AddSection({
     Name = "Dark Dex:",
@@ -214,11 +242,15 @@ local Section = Tab:AddSection({
     Name = "Server Hop/Rejoin/Hop to low server:"
 })
 
+Tab:AddLabel("Перекидывает на другой сервер")
+
 Tab:AddButton({
     Name = "Server Hop",
     Callback = function()loadstring(game:HttpGet(("https://pastebin.com/raw/MVTZZGpb"), true))()
     end
 })
+
+Tab:AddLabel("Перезаходит на тот же сервер.")
 
 Tab:AddButton({
     Name = "Rejoin",
@@ -233,6 +265,8 @@ Tab:AddButton({
     end
 })
 
+Tab:AddLabel("Перекидывает на маленький сервер")
+
 Tab:AddButton({
     Name = "Hop to low server",
     Callback = function()loadstring(game:HttpGet(("https://pastebin.com/raw/iup2nQ5X"), true))()
@@ -242,6 +276,8 @@ Tab:AddButton({
 local Section = Tab:AddSection({
     Name = "Auto Click:"
 })
+
+Tab:AddLabel("Включает/выключает автокликер")
 
 _G.autoClicking = false
 
@@ -269,6 +305,8 @@ local Section = Tab:AddSection({
     Name = "Anti AFK:"
 })
 
+Tab:AddLabel("Вас не кикнет за АФК")
+
 Tab:AddButton({
     Name = "Anti kick for AFK",
     Callback = function(afk)
@@ -280,12 +318,17 @@ end
 })
 
 local Tab = Window:MakeTab({
-    Name = "Characters"
+    Name = "Characters",
+    Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+    
 })
 
 local Section = Tab:AddSection({
     Name = "God Mode:"
 })
+
+Tab:AddParagraph("Важно!", "При нажатии на кнопку, вы станете бессмертым, но не сможете прыгать. Чтобы отключить функцию, просто ресетнитесь.")
 
 Tab:AddButton({
     Name = "God Mode",
@@ -296,6 +339,8 @@ end
 local Section = Tab:AddSection({
     Name = "NoClip:"
 })
+
+Tab:AddParagraph("Важно!", "NoClip перестает работать, если вы прыгните или упадете, поэтому не стоит говорить, что NoClip сломанный. К сожалению на этот момент пока что будет все так.")
 
 local Noclip = nil
 local Clip = nil
@@ -361,6 +406,8 @@ local Section = Tab:AddSection({
     Name = "Invisibility:"
 })
 
+Tab:AddLabel("Делает вас невидимым!")
+
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local humanoid = character:WaitForChild("Humanoid")
@@ -410,6 +457,8 @@ Tab:AddLabel("The script has been created by Snowt")
 
 Tab:AddLabel("My Telegram channel: t.me/Snowt_Roblox_Scripts")
 
-Tab:AddLabel("TESTING SCRIPT")
+Tab:AddLabel("The last update: 06.06.2024")
 
-Tab:AddLabel("Version: TESTING SCRIPT")
+Tab:AddLabel("Version: 1.2")
+
+OrionLib:Init()
