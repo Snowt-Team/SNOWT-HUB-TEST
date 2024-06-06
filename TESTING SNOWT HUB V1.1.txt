@@ -463,6 +463,6 @@ Tab:AddLabel("My Telegram channel: t.me/Snowt_Roblox_Scripts")
 
 Tab:AddLabel("TESTING SCRIPT")
 
-Tab:AddLabel("Version: 1.2")
+Tab:AddLabel("Version: TESTING SCRIPT")
 
 OrionLib:Init()
