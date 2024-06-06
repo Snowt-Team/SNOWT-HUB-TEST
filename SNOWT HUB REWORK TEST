@@ -265,10 +265,6 @@ _G.autoClicking = bool
 end
 })
 
-local Tab = Window:MakeTab({
-    Name = "Characters"
-})
-
 local Section = Tab:AddSection({
     Name = "Anti AFK"
 })
@@ -283,14 +279,22 @@ end)
 end
 })
 
+local Tab = Window:MakeTab({
+    Name = "Characters"
+})
+
 local Section = Tab:AddSection({
-    Name = "God Mode/Invisibility/NoClip"
+    Name = "God Mode"
 })
 
 Tab:AddButton({
     Name = "God Mode",
     Callback = function(gdm)loadstring(game:HttpGet(("https://pastebin.com/raw/yraTMGwu"), true))()
 end
+})
+
+local Section = Tab:AddSection({
+    Name = "NoClip"
 })
 
 local function EnableNoClip()
@@ -328,62 +332,183 @@ Tab:AddToggle({
     end
 })
 
-local destroy_almost_all_body = false
-local remove_accessory = false
+local Section = Tab:AddSection({
+    Name = "Invisibility"
+})
 
-	local function destroy_all()
-		for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-			if v.Name ~= "HumanoidRootPart" and v:IsA("MeshPart") then	
-				for i, vv in v:GetChildren() do
-					if vv:IsA("Motor6D") and v.Name ~= "Head" then
-						vv:Destroy()
-					end
-				end
+local ScriptStarted = false
+local Transparency = true
+local NoClip = true
 
-				if v.Name == "LowerTorso" then
-					v:Destroy()
-				end
-			end
-		end
-	end
-	
-	local function remove_acessory_sc()
-		for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do 
-			if v:IsA("Accessory") then
-				for i, vv in pairs(v:GetChildren()) do
-					if vv.Name == "Handle" then
-						for i, weld in pairs(vv:GetChildren()) do
-							if weld:IsA("Weld") then
-								weld:Destroy()
-							end
-						end
-					end
-				end
-			end
-		end
-	end
-	
-	invisible()
-	
-	task.wait(1)
-	
-	if destroy_almost_all_body then
-		destroy_all()
-	end
-	
-	if remove_accessory then
-		remove_acessory_sc()
-	end
+local Player = game:GetService("Players").LocalPlayer
+local RealCharacter = Player.Character or Player.CharacterAdded:Wait()
+ 
+local IsInvisible = false
+ 
+RealCharacter.Archivable = true
+local FakeCharacter = RealCharacter:Clone()
+local Part
+Part = Instance.new("Part", workspace)
+Part.Anchored = true
+Part.Size = Vector3.new(200, 1, 200)
+Part.CFrame = CFrame.new(0, 5000, 999999999999999999) 
+
+Part.CanCollide = true
+FakeCharacter.Parent = workspace
+FakeCharacter.HumanoidRootPart.CFrame = Part.CFrame * CFrame.new(0, 5, 0)
+ 
+for i, v in pairs(RealCharacter:GetChildren()) do
+  if v:IsA("LocalScript") then
+      local clone = v:Clone()
+      clone.Disabled = true
+      clone.Parent = FakeCharacter
+  end
+end
+if Transparency then
+  for i, v in pairs(FakeCharacter:GetDescendants()) do
+      if v:IsA("BasePart") then
+          v.Transparency = 0.7
+      end
+  end
+end
+local CanInvis = true
+function RealCharacterDied()
+  CanInvis = false
+  RealCharacter:Destroy()
+  RealCharacter = Player.Character
+  CanInvis = true
+  isinvisible = false
+  FakeCharacter:Destroy()
+  workspace.CurrentCamera.CameraSubject = RealCharacter.Humanoid
+ 
+  RealCharacter.Archivable = true
+  FakeCharacter = RealCharacter:Clone()
+  Part:Destroy()
+  Part = Instance.new("Part", workspace)
+  Part.Anchored = true
+  Part.Size = Vector3.new(200, 1, 200)
+  Part.CFrame = CFrame.new(9999, 9999, 9999)
+  Part.CanCollide = true
+  FakeCharacter.Parent = workspace
+  FakeCharacter.HumanoidRootPart.CFrame = Part.CFrame * CFrame.new(0, 5, 0)
+ 
+  for i, v in pairs(RealCharacter:GetChildren()) do
+      if v:IsA("LocalScript") then
+          local clone = v:Clone()
+          clone.Disabled = true
+          clone.Parent = FakeCharacter
+      end
+  end
+  if Transparency then
+      for i, v in pairs(FakeCharacter:GetDescendants()) do
+          if v:IsA("BasePart") then
+              v.Transparency = 0.7
+          end
+      end
+  end
+ RealCharacter.Humanoid.Died:Connect(function()
+ RealCharacter:Destroy()
+ FakeCharacter:Destroy()
+ end)
+ Player.CharacterAppearanceLoaded:Connect(RealCharacterDied)
+end
+RealCharacter.Humanoid.Died:Connect(function()
+ RealCharacter:Destroy()
+ FakeCharacter:Destroy()
+ end)
+Player.CharacterAppearanceLoaded:Connect(RealCharacterDied)
+local PseudoAnchor
+game:GetService "RunService".RenderStepped:Connect(
+  function()
+      if PseudoAnchor ~= nil then
+          PseudoAnchor.CFrame = Part.CFrame * CFrame.new(0, 5, 0)
+      end
+       if NoClip then
+      FakeCharacter.Humanoid:ChangeState(11)
+       end
+  end
+)
+ 
+PseudoAnchor = FakeCharacter.HumanoidRootPart
+local function EnableInvisible()
+  if IsInvisible == false then
+      local StoredCF = RealCharacter.HumanoidRootPart.CFrame
+      RealCharacter.HumanoidRootPart.CFrame = FakeCharacter.HumanoidRootPart.CFrame
+      FakeCharacter.HumanoidRootPart.CFrame = StoredCF
+      RealCharacter.Humanoid:UnequipTools()
+      Player.Character = FakeCharacter
+      workspace.CurrentCamera.CameraSubject = FakeCharacter.Humanoid
+      PseudoAnchor = RealCharacter.HumanoidRootPart
+      for i, v in pairs(FakeCharacter:GetChildren()) do
+          if v:IsA("LocalScript") then
+              v.Disabled = false
+          end
+      end
+ 
+      IsInvisible = true
+  else
+      local StoredCF = FakeCharacter.HumanoidRootPart.CFrame
+      FakeCharacter.HumanoidRootPart.CFrame = RealCharacter.HumanoidRootPart.CFrame
+ 
+      RealCharacter.HumanoidRootPart.CFrame = StoredCF
+ 
+      FakeCharacter.Humanoid:UnequipTools()
+      Player.Character = RealCharacter
+      workspace.CurrentCamera.CameraSubject = RealCharacter.Humanoid
+      PseudoAnchor = FakeCharacter.HumanoidRootPart
+      for i, v in pairs(FakeCharacter:GetChildren()) do
+          if v:IsA("LocalScript") then
+              v.Disabled = true
+          end
+      end
+      IsInvisible = false
+  end
+end
+
+local function DisableInvisible()
+      if IsInvisible == true then
+      local StoredCF = RealCharacter.HumanoidRootPart.CFrame
+      RealCharacter.HumanoidRootPart.CFrame = FakeCharacter.HumanoidRootPart.CFrame
+      FakeCharacter.HumanoidRootPart.CFrame = StoredCF
+      RealCharacter.Humanoid:UnequipTools()
+      Player.Character = FakeCharacter
+      workspace.CurrentCamera.CameraSubject = FakeCharacter.Humanoid
+      PseudoAnchor = RealCharacter.HumanoidRootPart
+      for i, v in pairs(FakeCharacter:GetChildren()) do
+          if v:IsA("LocalScript") then
+              v.Disabled = true
+          end
+      end
+ 
+      IsInvisible = false
+  else
+      local StoredCF = FakeCharacter.HumanoidRootPart.CFrame
+      FakeCharacter.HumanoidRootPart.CFrame = RealCharacter.HumanoidRootPart.CFrame
+ 
+      RealCharacter.HumanoidRootPart.CFrame = StoredCF
+
+      FakeCharacter.Humanoid:UnequipTools()
+      Player.Character = RealCharacter
+      workspace.CurrentCamera.CameraSubject = RealCharacter.Humanoid
+      PseudoAnchor = FakeCharacter.HumanoidRootPart
+      for i, v in pairs(FakeCharacter:GetChildren()) do
+          if v:IsA("LocalScript") then
+              v.Disabled = false
+          end
+      end
+      IsInvisible = true
+  end
+end
 
 Tab:AddToggle({
-    Name = "invisible On/Off",
+    Name = "Invisible on/off",
     Default = false,
-    Callback = function(invisib)
-        InvisEnabled = not InvisEnabled
-        if not InvisEnabled then
-            destroy_all()
+    Callback = function(invis)
+        InvisibleEnabled = not InvisibleEnabled 
+        if not InvisibleEnabled then
+            EnableInvisible()
         else
-            remove_acessory_sc()
+            DisableInvisible()
         end
 end
 })
