@@ -179,40 +179,43 @@ Tab:AddLabel("Включает/Выключает Esp Names.")
 Tab:AddToggle({
     Name = "Esp player names on/off",
     Default = false,
-    Callback = function(Enabled)
-        if Enabled then
-            for _, Player in pairs(game:GetService("Players"):GetPlayers()) do
-                if Player ~= game:GetService("Players").LocalPlayer then
-                    Player.CharacterAdded:Connect(function(Character)
-                        local BillboardGui = Instance.new("BillboardGui")
-                        BillboardGui.Name = "EspNameTag"
-                        BillboardGui.StudsOffset = Vector3.new(0, 1.5, 0)
-                        BillboardGui.AlwaysOnTop = true
-                        BillboardGui.Size = UDim2.new(0.2, 0, 0.1, 0)
+    Callback = function(state)
+        if state then -- Кнопка включена
+            local esp_settings = { ---- table for esp settings 
+                textsize = 8,
+                colour = 255,255,255
+            }
 
-                        local TextLabel = Instance.new("TextLabel")
-                        TextLabel.Name = "NameTag"
-                        TextLabel.Text = Player.Name
-                        TextLabel.Size = UDim2.new(1, 0, 1, 0)
-                        TextLabel.Font = Enum.Font.ArialBold
-                        TextLabel.FontSize = Enum.FontSize.Size24
-                        TextLabel.TextColor3 = Color3.new(255, 0, 0)
-                        TextLabel.BackgroundTransparency = 1
-                        TextLabel.Parent = BillboardGui
+            local gui = Instance.new("BillboardGui")
+            local esp = Instance.new("TextLabel",gui) ---- new instances to make the billboard gui and the textlabel
 
-                        BillboardGui.Parent = Character
-                    end)
+            gui.Name = "Cracked esp"; ---- properties of the esp
+            gui.ResetOnSpawn = false
+            gui.AlwaysOnTop = true;
+            gui.LightInfluence = 0;
+            gui.Size = UDim2.new(1.75, 0, 1.75, 0);
+            esp.BackgroundColor3 = Color3.fromRGB(255, 255, 255);
+            esp.Text = ""
+            esp.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001);
+            esp.BorderSizePixel = 4;
+            esp.BorderColor3 = Color3.new(esp_settings.colour)
+            esp.BorderSizePixel = 0
+            esp.Font = "GothamSemibold"
+            esp.TextSize = esp_settings.textsize
+            esp.TextColor3 = Color3.fromRGB(esp_settings.colour) -- text colour
+
+            game:GetService("RunService").RenderStepped:Connect(function() ---- loops faster than a while loop :)
+                for i,v in pairs (game:GetService("Players"):GetPlayers()) do
+                    if v ~= game:GetService("Players").LocalPlayer and v.Character.Head:FindFirstChild("Cracked esp")==nil  then -- craeting checks for team check, local player etc
+                        esp.Text = "{"..v.Name.."}"
+                        gui:Clone().Parent = v.Character.Head
+                    end
                 end
-            end
-        else
-            for _, Player in pairs(game:GetService("Players"):GetPlayers()) do
-                if Player ~= game:GetService("Players").LocalPlayer then
-                    Player.CharacterAdded:Connect(function(Character)
-                        local BillboardGui = Character:FindFirstChild("EspNameTag")
-                        if BillboardGui then
-                            BillboardGui:Destroy()
-                        end
-                    end)
+            end)
+        else -- Кнопка выключена
+            for i,v in pairs(game:GetService("Workspace"):GetDescendants()) do
+                if v:IsA("BillboardGui") and v.Name == "Cracked esp" then
+                    v:Destroy()
                 end
             end
         end
