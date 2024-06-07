@@ -311,7 +311,7 @@ local function DisableNameEsp()
 			text.Text = "[ "..p.Name.." ]"
 			text.Visible = false
 		else
-			text.Visible = true
+			text.Visible = false 
 		end
 	end)
 end
