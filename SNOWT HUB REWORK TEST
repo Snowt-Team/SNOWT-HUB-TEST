@@ -1,6 +1,6 @@
-Frame.Draggable = true
-
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+
+Frame.Draggable = true
 
 local Window = OrionLib:MakeWindow({Name = "SNOWT HUB [REWRITEN]", HidePremium = false, SaveConfig = false, ConfigFolder = "Snowt Scripts"})
 
