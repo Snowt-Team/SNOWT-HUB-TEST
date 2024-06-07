@@ -212,11 +212,12 @@ end
 end)
 end
 
-local function DisableEspName()
+local function DisableNameEsp()
     game:GetService("RunService").RenderStepped:Disconnect()
-
-    for _, gui in pairs(workspace:GetDescendants()) do
-        if gui:IsA("BillboardGui") and gui.Name == "Cracked esp" then
+    
+    for _, player in pairs(game:GetService("Players"):GetPlayers()) do
+        local gui = player.Character:FindFirstChild("Cracked esp")
+        if gui then
             gui:Destroy()
         end
     end
@@ -230,7 +231,7 @@ Tab:AddToggle({
         if not EspNameOn then
             EnableEspName()
             else
-            DisableEspName()
+            DisableNameEsp()
         end
      end
 })
