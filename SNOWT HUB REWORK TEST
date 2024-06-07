@@ -176,44 +176,47 @@ Tab:AddToggle({
 
 Tab:AddLabel("Включает/Выключает Esp Names.")
 
-local espDisplayName, espDisplayNameText
-
-local function EspNamesOn()
-            espDisplayName = Instance.new("BillboardGui")
-                espDisplayName.Adornee = player.Character.Head
-                espDisplayName.Name = "DisplayName"
-                espDisplayName.Size = UDim2.new(3,0,1.5,0)
-                espDisplayName.StudsOffset = Vector3.new(0,2,0)
-                
-                espDisplayNameText = Instance.new("TextLabel")
-                espDisplayNameText.Text = player.Name
-                espDisplayNameText.Font = "GothamBold"
-                espDisplayNameText.TextSize = 12
-                espDisplayNameText.TextColor3 = Color3.new(1,1,1)
-                espDisplayNameText.BackgroundTransparency = 1
-                espDisplayNameText.Size = UDim2.new(1,0,1,0)
-                espDisplayNameText.Parent = espDisplayName
-                espDisplayName.Parent = player.Character
-            end
-
-local function EspNamesOff()
-    for _, player in ipairs(game:GetService("Players"):GetChildren()) do
-                espDisplayName = player.Character:FindFirstChild("DisplayName")
-                    espDisplayName:Destroy()
-                end
-            end
-
 Tab:AddToggle({
     Name = "Esp player names on/off",
     Default = false,
-    Callback = function()
-        EnableEspNames = not EnableEspNames
-        if not EnableEspNames then
-            EspNamesOn()
-        else
-            EspNamesOff()
+    Callback = function(Enabled)
+        if Enabled then
+            for _, Player in pairs(game:GetService("Players"):GetPlayers()) do
+                if Player ~= game:GetService("Players").LocalPlayer then
+                    Player.CharacterAdded:Connect(function(Character)
+                        local BillboardGui = Instance.new("BillboardGui")
+                        BillboardGui.Name = "EspNameTag"
+                        BillboardGui.StudsOffset = Vector3.new(0, 1.5, 0)
+                        BillboardGui.AlwaysOnTop = true
+                        BillboardGui.Size = UDim2.new(0.2, 0, 0.1, 0)
+
+                        local TextLabel = Instance.new("TextLabel")
+                        TextLabel.Name = "NameTag"
+                        TextLabel.Text = Player.Name
+                        TextLabel.Size = UDim2.new(1, 0, 1, 0)
+                        TextLabel.Font = Enum.Font.ArialBold
+                        TextLabel.FontSize = Enum.FontSize.Size24
+                        TextLabel.TextColor3 = Color3.new(255, 0, 0)
+                        TextLabel.BackgroundTransparency = 1
+                        TextLabel.Parent = BillboardGui
+
+                        BillboardGui.Parent = Character
+                    end)
+                end
             end
-end
+        else
+            for _, Player in pairs(game:GetService("Players"):GetPlayers()) do
+                if Player ~= game:GetService("Players").LocalPlayer then
+                    Player.CharacterAdded:Connect(function(Character)
+                        local BillboardGui = Character:FindFirstChild("EspNameTag")
+                        if BillboardGui then
+                            BillboardGui:Destroy()
+                        end
+                    end)
+                end
+            end
+        end
+    end
 })
 
 local Section = Tab:AddSection({
