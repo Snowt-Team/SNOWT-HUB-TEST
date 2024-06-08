@@ -307,78 +307,6 @@ Tab:AddToggle({
 
 Tab:AddLabel("Включает/Выключает Esp Names.")
 
-local NameTags = true
-local TextFont = Enum.Font.RobotoMono
-local NameColor = Color3.fromRGB(255, 255, 255)
-local NamePositioning = false
-
-local Folder = Instance.new("Folder", game:GetService("CoreGui"))
-Folder.Name = ""
-
-local function EnableNameEsp()
-
-AddNameTag = function(Character)
-   local BGui = Instance.new("BillboardGui", Folder)
-   local Frame = Instance.new("Frame", BGui)
-   local TextLabel = Instance.new("TextLabel", Frame)
-   
-   BGui.Adornee = Character:WaitForChild("Head")
-   BGui.StudsOffset = Vector3.new(0, 3, 0)
-   BGui.AlwaysOnTop = true
-   
-   BGui.Size = UDim2.new(4, 0, 0.5, 0)
-   Frame.Size = UDim2.new(1, 0, 1, 0)
-   TextLabel.Size = UDim2.new(1, 0, 1, 0)
-   
-   Frame.BackgroundTransparency = 1
-   TextLabel.BackgroundTransparency = 1
-   
-   TextLabel.Text = Character.Name
-   TextLabel.Font = TextFont
-   TextLabel.TextColor3 = NameColor
-   TextLabel.TextScaled = NamePositioning
-end
-
-for i, v in ipairs(game:GetService("Players"):GetPlayers()) do
-  if v ~= game:GetService("Players").LocalPlayer then
-               AddNameTag(Character)
-           end
-       end
-       if v.Character then
-           AddNameTag(v.Character)
-       end
-
-game:GetService("Players").PlayerAdded:Connect(function(Player)
-   Player.CharacterAdded:Connect(function(Character)
-           AddNameTag(Character)
-   end)
-end)   
-end
-
-local function DisableNameEsp()
-    for i, v in ipairs(game:GetService("Players"):GetPlayers()) do
-  if v ~= game:GetService("Players").LocalPlayer then
-               AddNameTag(Character)
-           end
-       end
-       if v.Character then
-           v.Character:Destroy()
-       end
-    end
-
-Tab:AddToggle({
-    Name = "Esp player names",
-    Default = false,
-    Callback = function()
-        EspNameOn = not EspNameOn
-        if not EspNameOn then
-            EnableNameEsp()
-            else 
-            DisableNameEsp()
-        end
-    end
-})
-
 local Section = Tab:AddSection({
     Name = "Aimbot:"
 })
@@ -532,30 +460,121 @@ local Section = Tab:AddSection({
     Name = "FPS boost:"
 })
 
+Tab:AddButton({
+    Name = "Fps boost",
+    Callback = function(fpsb)
+        G.Settings = {
+    Players = {
+        ["Ignore Me"] = true, -- Ignore your Character
+        ["Ignore Others"] = true -- Ignore other Characters
+    },
+    Meshes = {
+        Destroy = false, -- Destroy Meshes
+        LowDetail = true -- Low detail meshes (NOT SURE IT DOES ANYTHING)
+    },
+    Images = {
+        Invisible = true, -- Invisible Images
+        LowDetail = false, -- Low detail images (NOT SURE IT DOES ANYTHING)
+        Destroy = false, -- Destroy Images
+    },
+    Other = {
+        ["No Particles"] = true, -- Disables all ParticleEmitter, Trail, Smoke, Fire and Sparkles
+        ["No Camera Effects"] = true, -- Disables all PostEffect's (Camera/Lighting Effects)
+        ["No Explosions"] = true, -- Makes Explosion's invisible
+        ["No Clothes"] = true, -- Removes Clothing from the game
+        ["Low Water Graphics"] = true, -- Removes Water Quality
+        ["No Shadows"] = true, -- Remove Shadows
+        ["Low Rendering"] = true, -- Lower Rendering
+        ["Low Quality Parts"] = true -- Lower quality parts
+    }
+}
+loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FPSBooster/main/FPSBooster.lua"))()
+end
+})
+
 local Section = Tab:AddSection({
     Name = "FPS unlock:"
+})
+
+Tab:AddButton({
+    Name = "Fps unlock",
+    Callback = function(fpsu)
+        getgenv().boostFPS = true -- // changing true to false will turn it off
+
+local vim = game:GetService("VirtualInputManager")
+setfpscap(5000)
+
+game.DescendantAdded:Connect(function(d)
+   if d.Name == "MainView" and d.Parent.Name == "DevConsoleUI" and boostFPS then
+       task.wait()
+       local screen = d.Parent.Parent.Parent
+       screen.Enabled = false;
+       d.Visible = false;
+   end
+end)
+
+vim:SendKeyEvent(true, "F9", 0, game)    
+wait()
+vim:SendKeyEvent(false, "F9", 0, game)  
+
+while true do
+   task.wait()
+   if not boostFPS then
+       continue;
+   end
+
+   warn("")
+end
 })
 
 local Section = Tab:AddSection ({
     Name = "RTX mode:"
 })
+Tab:AddButton ({
+    Name = "Rtx mode",
+    Callback = function(rtxm)
+local Blur = Instance.new("BlurEffect", game.Lighting)
+Blur.Size = 4.1
+game.Lighting.GlobalShadows = true
+settings().Rendering.QualityLevel = "Level21"
+
+for _,v in pairs(game:GetDescendants()) do
+    if v:IsA("BasePart") or v:IsA("Union") or v:IsA("CornerWedgePart") or v:IsA("TrussPart") then
+        v.Reflectance = v.Reflectance + 1
+    elseif v:IsA("MeshPart") then
+        v.Reflectance = v.Reflectance + 1
+    end
+end
+end
+})
 
 local Section = Tab:AddSection ({
-    Name = "HighLight"
+    Name = "Lighting:"
+})
+
+Tab:AddButton({
+    Name = "Lighting",
+    Callback = function(lght)
+        setscriptable(Lighting, "Technology", true)
+Lighting.Technology = Enum.Technology.Future
+
+for _, v in next, workspace:GetDescendants() do
+    if v:IsA("PointLight") or v:IsA("SpotLighting") or v:IsA("SurfaceLight") then
+        local Light = v
+        if not Light.Shadows then
+            Light.Shadows = true
+        end
+    end
+end
+end
 })
 
 local Tab = Window:MakeTab({
-    Name = "Credit",
+    Name = "Credits",
     Icon = "rbxassetid://7733955511",
 	PremiumOnly = false
 })
 
-Tab:AddLabel("The script has been created by Snowt")
-
-Tab:AddLabel("My Telegram channel: t.me/Snowt_Roblox_Scripts")
-
-Tab:AddLabel("The last update: 06.06.2024")
-
-Tab:AddLabel("Version: 1.2")
-
-OrionLib:Init()
+Tab:AddLabel("Developers of Script")
+Tab:AddParagraph("SNOWT", "The designer, developer, tester, and owner of this script, as well as the owner of the telegram channel t.me/roblox_snowt_scripts")
+Tab:AddParagraph ("And no one else", "SNOWT is the sole developer and participant of the SNOWT HUB project")
