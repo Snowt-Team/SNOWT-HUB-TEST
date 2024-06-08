@@ -224,13 +224,13 @@ end
 
 Tab:AddToggle({
     Name = "Esp names players",
-    Default = true,
+    Default = false,
     Callback = function(espn)
         EspNameOn = not EspNameOn
         if not EspNameOn then
             EnableEspName()
             else
-            DisableEspName()
+            DisableNameEsp()
         end
      end
 })
