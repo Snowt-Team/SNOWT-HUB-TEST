@@ -132,9 +132,133 @@ end)
 end
 })
 
+local Section = Tab:AddSection({
+    Name = "God Mode:"
+})
+
+Tab:AddParagraph("Важно!", "При нажатии на кнопку, вы станете бессмертым, но не сможете прыгать. Чтобы отключить функцию, просто ресетнитесь.")
+
+Tab:AddButton({
+    Name = "God Mode",
+    Callback = function(gdm)loadstring(game:HttpGet(("https://pastebin.com/raw/yraTMGwu"), true))()
+end
+})
+
+local Section = Tab:AddSection({
+    Name = "NoClip:"
+})
+
+Tab:AddParagraph("Важно!", "NoClip перестает работать, если вы прыгните или упадете, поэтому не стоит говорить, что NoClip сломанный. К сожалению на этот момент пока что будет все так.")
+
+local Noclip = nil
+local Clip = nil
+
+local function NoClipEnabled()
+function noclip()
+	Clip = false
+		if Clip == false and game.Players.LocalPlayer.Character ~= nil then
+			for _,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+				if v:IsA('BasePart') and v.CanCollide and v.Name ~= floatName then
+					v.CanCollide = false
+				end
+			end
+		end
+		wait(0.21)
+	end
+	Noclip = game:GetService('RunService').Stepped:Connect(Nocl)
+
+function clip()
+	if Noclip then Noclip:Disconnect() end
+	Clip = true
+end
+
+noclip() 
+end
+
+local function NoClipDisabled()
+    function noclip()
+	Clip = true
+		if Clip == true and game.Players.LocalPlayer.Character ~= nil then
+			for _,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+				if v:IsA('BasePart') and v.CanCollide and v.Name ~= floatName then
+					v.CanCollide = true
+				end
+			end
+		end
+		wait(0.21)
+	end
+	Noclip = game:GetService('RunService').Stepped:Connect(Nocl)
+	
+	function clip()
+	if Noclip then Noclip:Disconnect() end
+	Clip = true
+end
+
+noclip() 
+end
+
+Tab:AddToggle({
+    Name = "NoClip",
+    Default = false,
+    Callback = function(nclpnf)
+            NoclipOn = not NoclipOn
+        if not NoclipOn then
+            NoClipEnabled()
+        else
+            NoClipDisabled()
+        end
+end
+})
+
+local Section = Tab:AddSection({
+    Name = "Invisibility:"
+})
+
+Tab:AddLabel("Делает вас невидимым!")
+
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+local function PTransparencyOn(transparency)
+    for _, part in ipairs(character:GetDescendants()) do
+        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+            part.Transparency = transparency
+        end
+    end
+end
+
+
+PTransparencyOn(1)
+
+local function PTransparencyOff(transparency)
+    for _, part in ipairs(character:GetDescendants()) do
+        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+            part.Transparency = transparency
+        end
+    end
+end
+
+
+PTransparencyOff(0)
+
+Tab:AddToggle({
+    Name = "Invisible",
+    Default = false,
+    Callback = function(invis)
+            InvisOn = not InvisOn
+        if not InvisOn then
+            PTransparencyOn(1)
+        else
+            PTransparencyOff(0)
+        end
+end
+})
+
+
 local Tab = Window:MakeTab({
     Name = "Visual",
-    Icon = "rbxassetid://4483345998",
+    Icon = "rbxassetid://7733774602",
 	PremiumOnly = false
 })
 
@@ -199,7 +323,7 @@ Tab:AddButton({
 
 local Tab = Window:MakeTab({
     Name = "Scripts for Dev",
-    Icon = "http://www.roblox.com/asset/?id=7733674079",
+    Icon = "rbxassetid://8997386648",
 	PremiumOnly = false
 })
 
@@ -329,138 +453,8 @@ end
 })
 
 local Tab = Window:MakeTab({
-    Name = "Characters",
-    Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
-    
-})
-
-local Section = Tab:AddSection({
-    Name = "God Mode:"
-})
-
-Tab:AddParagraph("Важно!", "При нажатии на кнопку, вы станете бессмертым, но не сможете прыгать. Чтобы отключить функцию, просто ресетнитесь.")
-
-Tab:AddButton({
-    Name = "God Mode",
-    Callback = function(gdm)loadstring(game:HttpGet(("https://pastebin.com/raw/yraTMGwu"), true))()
-end
-})
-
-local Section = Tab:AddSection({
-    Name = "NoClip:"
-})
-
-Tab:AddParagraph("Важно!", "NoClip перестает работать, если вы прыгните или упадете, поэтому не стоит говорить, что NoClip сломанный. К сожалению на этот момент пока что будет все так.")
-
-local Noclip = nil
-local Clip = nil
-
-local function NoClipEnabled()
-function noclip()
-	Clip = false
-		if Clip == false and game.Players.LocalPlayer.Character ~= nil then
-			for _,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
-				if v:IsA('BasePart') and v.CanCollide and v.Name ~= floatName then
-					v.CanCollide = false
-				end
-			end
-		end
-		wait(0.21)
-	end
-	Noclip = game:GetService('RunService').Stepped:Connect(Nocl)
-
-function clip()
-	if Noclip then Noclip:Disconnect() end
-	Clip = true
-end
-
-noclip() 
-end
-
-local function NoClipDisabled()
-    function noclip()
-	Clip = true
-		if Clip == true and game.Players.LocalPlayer.Character ~= nil then
-			for _,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
-				if v:IsA('BasePart') and v.CanCollide and v.Name ~= floatName then
-					v.CanCollide = true
-				end
-			end
-		end
-		wait(0.21)
-	end
-	Noclip = game:GetService('RunService').Stepped:Connect(Nocl)
-	
-	function clip()
-	if Noclip then Noclip:Disconnect() end
-	Clip = true
-end
-
-noclip() 
-end
-
-Tab:AddToggle({
-    Name = "NoClip",
-    Default = false,
-    Callback = function(nclpnf)
-            NoclipOn = not NoclipOn
-        if not NoclipOn then
-            NoClipEnabled()
-        else
-            NoClipDisabled()
-        end
-end
-})
-
-local Section = Tab:AddSection({
-    Name = "Invisibility:"
-})
-
-Tab:AddLabel("Делает вас невидимым!")
-
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:WaitForChild("Humanoid")
-
-local function PTransparencyOn(transparency)
-    for _, part in ipairs(character:GetDescendants()) do
-        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
-            part.Transparency = transparency
-        end
-    end
-end
-
-
-PTransparencyOn(1)
-
-local function PTransparencyOff(transparency)
-    for _, part in ipairs(character:GetDescendants()) do
-        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
-            part.Transparency = transparency
-        end
-    end
-end
-
-
-PTransparencyOff(0)
-
-Tab:AddToggle({
-    Name = "Invisible",
-    Default = false,
-    Callback = function(invis)
-            InvisOn = not InvisOn
-        if not InvisOn then
-            PTransparencyOn(1)
-        else
-            PTransparencyOff(0)
-        end
-end
-})
-
-local Tab = Window:MakeTab({
     Name = "Credit",
-    Icon = "rbxassetid://4483345998",
+    Icon = "rbxassetid://7733955511",
 	PremiumOnly = false
 })
 
