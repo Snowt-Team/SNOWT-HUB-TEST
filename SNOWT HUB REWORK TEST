@@ -11,8 +11,67 @@ OrionLib:MakeNotification({
 
 local Tab = Window:MakeTab({
 	Name = "Main",
-	Icon = "rbxassetid://4483345998",
+	Icon = "http://www.roblox.com/asset/?id=4370345144",
 	PremiumOnly = false
+})
+
+local Section = Tab:AddSection({
+    Name = "Fly:"
+})
+
+Tab:AddLabel("Загружает GUI с полетом.")
+
+Tab:AddButton({
+    Name = "Activate Fly",
+    Callback = function(fly)loadstring(game:HttpGet(("https://pastebin.com/raw/SLTqw4r4"), true))()
+    end
+})
+
+local Tab = Window:MakeTab({
+    Name = "Teleport",
+    Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local Section = Tab:AddSection({
+    Name = "Teleport function:"
+})
+
+Tab:AddParagraph("Важно!", "Данная функция позволяет вам телепортироваться к любому игроку, чтобы обновить список игроков, вам нужно переинжектить скрипт.")
+
+local plrs = game.Players
+
+local playerNames = {}
+local players = plrs:GetPlayers()
+
+for _, player in ipairs(players) do
+table.insert(playerNames, player.Name)
+end
+
+Tab:AddDropdown({
+    Name = "Tp to players",
+    Default = playerNames[1] or "No players",
+    Options = playerNames,
+    Callback = function(selectedplrName)
+    local targetPlayer = plrs:FindFirstChild(selectedplrName)
+
+    if targetPlayer and targetPlayer.Character and targetPlayer.Character: FindFirstChild("HumanoidRootPart") then
+    local targetPosition = targetPlayer.Character.HumanoidRootPart.Position
+    local localPlayerRoot = plrs.LocalPlayer.Character: FindFirstChild("HumanoidRootPart")
+
+    if localPlayerRoot then
+    localPlayerRoot.CFrame = CFrame.new(targetPosition)
+    end
+    end
+    print(selectedplrName)
+    end
+})
+
+local Tab = Window:MakeTab({
+    Name = "Player",
+    Icon = "http://www.roblox.com/asset/?id=4335489011",
+    PremiumOnly = false
+    
 })
 
 local Section = Tab:AddSection({
@@ -73,58 +132,6 @@ end)
 end
 })
 
-local Section = Tab:AddSection({
-    Name = "Fly:"
-})
-
-Tab:AddLabel("Загружает GUI с полетом.")
-
-Tab:AddButton({
-    Name = "Activate Fly",
-    Callback = function(fly)loadstring(game:HttpGet(("https://pastebin.com/raw/SLTqw4r4"), true))()
-    end
-})
-
-local Tab = Window:MakeTab({
-    Name = "Teleport",
-    Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
-})
-
-local Section = Tab:AddSection({
-    Name = "Teleport function:"
-})
-
-Tab:AddParagraph("Важно!", "Данная функция позволяет вам телепортироваться к любому игроку, чтобы обновить список игроков, вам нужно переинжектить скрипт.")
-
-local plrs = game.Players
-
-local playerNames = {}
-local players = plrs:GetPlayers()
-
-for _, player in ipairs(players) do
-table.insert(playerNames, player.Name)
-end
-
-Tab:AddDropdown({
-    Name = "Tp to players",
-    Default = playerNames[1] or "No players",
-    Options = playerNames,
-    Callback = function(selectedplrName)
-    local targetPlayer = plrs:FindFirstChild(selectedplrName)
-
-    if targetPlayer and targetPlayer.Character and targetPlayer.Character: FindFirstChild("HumanoidRootPart") then
-    local targetPosition = targetPlayer.Character.HumanoidRootPart.Position
-    local localPlayerRoot = plrs.LocalPlayer.Character: FindFirstChild("HumanoidRootPart")
-
-    if localPlayerRoot then
-    localPlayerRoot.CFrame = CFrame.new(targetPosition)
-    end
-    end
-    print(selectedplrName)
-    end
-})
-
 local Tab = Window:MakeTab({
     Name = "Visual",
     Icon = "rbxassetid://4483345998",
@@ -176,64 +183,7 @@ Tab:AddToggle({
 
 Tab:AddLabel("Включает/Выключает Esp Names.")
 
-local function EnableEspName()
-    local esp_settings = { 
-    textsize = 8,
-    colour = 255,255,255
-}
- 
-local gui = Instance.new("BillboardGui")
-local esp = Instance.new("TextLabel",gui)
- 
- 
- 
-gui.Name = "Cracked esp"; 
-gui.ResetOnSpawn = false
-gui.AlwaysOnTop = true;
-gui.LightInfluence = 0;
-gui.Size = UDim2.new(1.75, 0, 1.75, 0);
-esp.BackgroundColor3 = Color3.fromRGB(255, 255, 255);
-esp.Text = ""
-esp.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001);
-esp.BorderSizePixel = 4;
-esp.BorderColor3 = Color3.new(esp_settings.colour)
-esp.BorderSizePixel = 0
-esp.Font = "GothamSemibold"
-esp.TextSize = esp_settings.textsize
-esp.TextColor3 = Color3.fromRGB(esp_settings.colour)
- 
-game:GetService("RunService").RenderStepped:Connect(function()
-    for i,v in pairs (game:GetService("Players"):GetPlayers()) do
-        if v ~= game:GetService("Players").LocalPlayer and v.Character.Head:FindFirstChild("Cracked esp")==nil  then 
-            esp.Text = "{"..v.Name.."}"
-            gui:Clone().Parent = v.Character.Head
-    end
-end
-end)
-end
 
-local function DisableNameEsp()
-    game:GetService("RunService").RenderStepped:Disconnect()
-
-    for _, gui in pairs(workspace:GetDescendants()) do
-        if gui:IsA("BillboardGui") and gui.Name == "Cracked esp" then
-            gui:Destroy()
-        end
-    end
-end
-
-Tab:AddToggle({
-    Name = "Esp names players",
-    Default = false,
-    Callback = function(espn)
-        EspNameOn = not EspNameOn
-        if not EspNameOn then
-            EnableEspName()
-            else
-            DisableNameEsp()
-        end
-     end
-})
 
 local Section = Tab:AddSection({
     Name = "Aimbot:"
@@ -249,7 +199,7 @@ Tab:AddButton({
 
 local Tab = Window:MakeTab({
     Name = "Scripts for Dev",
-    Icon = "rbxassetid://4483345998",
+    Icon = "http://www.roblox.com/asset/?id=7733674079",
 	PremiumOnly = false
 })
 
@@ -295,7 +245,7 @@ Tab:AddButton({
 
 local Tab = Window:MakeTab({
     Name = "Misc",
-    Icon = "rbxassetid://4483345998",
+    Icon = "http://www.roblox.com/asset/?id=4370318685",
 	PremiumOnly = false
 })
 
