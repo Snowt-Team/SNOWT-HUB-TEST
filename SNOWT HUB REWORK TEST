@@ -453,6 +453,28 @@ end
 })
 
 local Tab = Window:MakeTab({
+    Name = "Optimization",
+    Icon = "rbxassetid://7733765045",
+    PremiumOnly = false
+})
+
+local Section = Tab:AddSection({
+    Name = "FPS boost:"
+})
+
+local Section = Tab:AddSection({
+    Name = "FPS unlock:"
+})
+
+local Section = Tab:AddSection ({
+    Name = "RTX mode:"
+})
+
+local Section = Tab:AddSection ({
+    Name = "HighLight"
+})
+
+local Tab = Window:MakeTab({
     Name = "Credit",
     Icon = "rbxassetid://7733955511",
 	PremiumOnly = false
