@@ -323,26 +323,17 @@ local function AddEsp(char)
 end
 
 local function EnableName()
-    gui.Name = "Cracked esp"
-    gui.ResetOnSpawn = false
+    nameEsp.TextColor3 = Color3.fromRGB(esp_settings.colour)
+    gui.ResetOnSpawn = true
     gui.AlwaysOnTop = true
     gui.LightInfluence = 0
-    gui.Size = UDim2.new(1.75, 0, 1.75, 0)
-    nameEsp.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    nameEsp.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
-    nameEsp.BorderSizePixel = 4
-    nameEsp.BorderColor3 = Color3.new(esp_settings.colour)
-    nameEsp.BorderSizePixel = 0
-    nameEsp.Font = "GothamSemibold"
-    nameEsp.TextSize = esp_settings.textsize
-    nameEsp.TextColor3 = Color3.fromRGB(esp_settings.colour)
-
+    
     game:GetService("Players").PlayerAdded:Connect(function(v)
         if v ~= game:GetService("Players").LocalPlayer then
             AddEsp(v.Character)
         end
     end)
-
+    
     game:GetService("Players").CharacterAdded:Connect(function(char)
         if char ~= game:GetService("Players").LocalPlayer.Character then
             AddEsp(char)
@@ -353,7 +344,6 @@ end
 function DisableName()
     for _, v in pairs(game:GetService("Players"):GetPlayers()) do
         if v ~= game:GetService("Players").LocalPlayer and v.Character:FindFirstChild("Cracked esp") then
-            nameEsp.TextColor3 = Color3.fromRGB(esp_settings.colour)
             gui:Destroy()
         end
     end
@@ -363,7 +353,7 @@ EnableName() -- вызов функции EnableName()
 
 Tab:AddToggle({
     Name = "Name Esp",
-    Default = true,
+    Default = false,
     Callback = function(espn)
         NameOn = not NameOn
 
