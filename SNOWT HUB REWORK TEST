@@ -313,20 +313,34 @@ local esp_settings = {
 }
 
 local gui = Instance.new("BillboardGui")
-local nameEsp = Instance.new("TextLabel", gui)
+local parentEsp = Instance.new("TextLabel", gui)
 
 local function AddEsp(char)
-    if not char.Head:FindFirstChild("Cracked esp") then
+    if not char:FindFirstChild("Cracked esp") and not char:IsA("StarterCharacter") then -- Исправляет баг, из-за которого esp не добавлялся для локального игрока и добавлялся дважды для StarterCharacter
+        local nameEsp = Instance.new("TextLabel", parentEsp)
         nameEsp.Text = char.Parent.Name -- Устанавливаем текст nameEsp на имя игрока
-        gui:Clone().Parent = char.Head
+        nameEsp.Name = "Cracked esp"
+        nameEsp.ResetOnSpawn = false
+        nameEsp.AlwaysOnTop = true
+        nameEsp.LightInfluence = 0
+        nameEsp.Size = UDim2.new(1.75, 0, 1.75, 0)
+        nameEsp.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        nameEsp.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
+        nameEsp.BorderSizePixel = 4
+        nameEsp.BorderColor3 = Color3.new(esp_settings.colour)
+        nameEsp.BorderSizePixel = 0
+        nameEsp.Font = "GothamSemibold"
+        nameEsp.TextSize = esp_settings.textsize
+        nameEsp.TextColor3 = Color3.fromRGB(esp_settings.colour)
+        nameEsp.Parent = char.Head
     end
 end
 
 local function EnableName()
-    nameEsp.TextColor3 = Color3.fromRGB(esp_settings.colour)
-    gui.ResetOnSpawn = true
-    gui.AlwaysOnTop = true
-    gui.LightInfluence = 0
+    parentEsp.TextColor3 = Color3.fromRGB(esp_settings.colour)
+    parentEsp.ResetOnSpawn = true
+    parentEsp.AlwaysOnTop = true
+    parentEsp.LightInfluence = 0
     
     game:GetService("Players").PlayerAdded:Connect(function(v)
         if v ~= game:GetService("Players").LocalPlayer then
@@ -335,7 +349,7 @@ local function EnableName()
     end)
     
     game:GetService("Players").CharacterAdded:Connect(function(char)
-        if char ~= game:GetService("Players").LocalPlayer.Character then
+        if char ~= game:GetService("Players").LocalPlayer.Character and not char:IsA("StarterCharacter") then
             AddEsp(char)
         end
     end)
@@ -353,7 +367,7 @@ EnableName() -- вызов функции EnableName()
 
 Tab:AddToggle({
     Name = "Name Esp",
-    Default = false,
+    Default = true,
     Callback = function(espn)
         NameOn = not NameOn
 
