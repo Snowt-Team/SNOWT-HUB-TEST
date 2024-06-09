@@ -336,31 +336,21 @@ local function removeEspName(player)
     end
 end
 
--- Функция для включения esp-никнеймов
-local function enableEspNames()
+-- Функция для обновления esp-никнеймов всех игроков
+local function updateEspNames()
     for _, player in pairs(game:GetService("Players"):GetPlayers()) do
         if player ~= game:GetService("Players").LocalPlayer and player.Character then
-            playerEspNames[player] = createEspName(player)
+            if playerEspNames[player] == nil then
+                playerEspNames[player] = createEspName(player)
+            end
+        else
+            removeEspName(player)
         end
     end
 end
 
--- Функция для отключения esp-никнеймов
-local function disableEspNames()
-    for player, espName in pairs(playerEspNames) do
-        removeEspName(player)
-    end
-end
-
 -- Обработчик события RenderStepped
-game:GetService("RunService").RenderStepped:Connect(function()
-    -- Обновляем esp-никнеймы только для локального игрока
-    if game:GetService("Players").LocalPlayer.Character then
-        enableEspNames()
-    else
-        disableEspNames()
-    end
-end)
+game:GetService("RunService").RenderStepped:Connect(updateEspNames)
 
 -- Настраиваем esp-никнейм
 nameEsp.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -372,17 +362,19 @@ nameEsp.Font = "GothamSemibold"
 nameEsp.TextSize = esp_settings.textsize
 nameEsp.TextColor3 = Color3.fromRGB(esp_settings.colour)
 
-disableEspNames() -- Отключаем esp-никнеймы при запуске
+updateEspNames() -- Первоначальное создание esp-никнеймов
 
 Tab:AddToggle({
     Name = "Name Esp",
-    Default = true,
+    Default = false,
     Callback = function(espn)
         NameOn = not NameOn
         if NameOn then
-            enableEspNames()
+            updateEspNames()
         else
-            disableEspNames()
+            for player, espName in pairs(playerEspNames) do
+                removeEspName(player)
+            end
         end
     end
 })
