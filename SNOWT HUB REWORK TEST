@@ -317,7 +317,7 @@ local nameEsp = Instance.new("TextLabel", gui)
 
 local function AddEsp(char)
     if not char.Head:FindFirstChild("Cracked esp") then
-        nameEsp.Text = "{" .. char.Parent.Name .. "}"
+        nameEsp.Text = char.Parent.Name -- Устанавливаем текст nameEsp на имя игрока
         gui:Clone().Parent = char.Head
     end
 end
@@ -352,7 +352,8 @@ end
 
 function DisableName()
     for _, v in pairs(game:GetService("Players"):GetPlayers()) do
-        if v ~= game:GetService("Players").LocalPlayer and v.Character and v.Character:FindFirstChild("Cracked esp") then
+        if v ~= game:GetService("Players").LocalPlayer and v.Character:FindFirstChild("Cracked esp") then
+            nameEsp.TextColor3 = Color3.fromRGB(esp_settings.colour)
             gui:Destroy()
         end
     end
