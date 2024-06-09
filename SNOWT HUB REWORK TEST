@@ -309,75 +309,80 @@ Tab:AddLabel("Включает/Выключает Esp Names.")
 
 local esp_settings = {
     textsize = 8,
-    colour = 255, 255, 255
+    colour = {255, 255, 0} -- зеленый цвет
 }
 
 local gui = Instance.new("BillboardGui")
 local nameEsp = Instance.new("TextLabel", gui)
 
-local function EnableName()
-    gui.Name = "Cracked esp"
-    gui.ResetOnSpawn = false
-    gui.AlwaysOnTop = true
-    gui.LightInfluence = 0
-    gui.Size = UDim2.new(1.75, 0, 1.75, 0)
-    nameEsp.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    nameEsp.Text = ""
-    nameEsp.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
-    nameEsp.BorderSizePixel = 4
-    nameEsp.BorderColor3 = Color3.new(esp_settings.colour)
-    nameEsp.BorderSizePixel = 0
-    nameEsp.Font = "GothamSemibold"
-    nameEsp.TextSize = esp_settings.textsize
-    nameEsp.TextColor3 = Color3.fromRGB(esp_settings.colour)
+-- Таблица для хранения списков esp-никнеймов игроков
+local playerEspNames = {}
 
-    game:GetService("RunService").RenderStepped:Connect(function()
-        for i, v in pairs(game:GetService("Players"):GetPlayers()) do
-            if v ~= game:GetService("Players").LocalPlayer and v.Character and v.Character.Head:FindFirstChild("Cracked esp") == nil then
-                nameEsp.Text = "{" .. v.Name .. "}"
-                gui:Clone().Parent = v.Character.Head
-            end
-        end
-    end)
-
-    -- Обработчик события PlayerAdded
-    game:GetService("Players").PlayerAdded:Connect(function(player)
-        if player ~= game:GetService("Players").LocalPlayer then
-            nameEsp.Text = "{" .. player.Name .. "}"
-            gui:Clone().Parent = player.Character.Head
-        end
-    end)
-
-    -- Обработчик события CharacterAdded
-    game:GetService("Players").CharacterAdded:Connect(function(character)
-        if character ~= game:GetService("Players").LocalPlayer.Character and character.Head:FindFirstChild("Cracked esp") == nil then
-            nameEsp.Text = "{" .. character.Parent.Name .. "}"
-            gui:Clone().Parent = character.Head
-        end
-    end)
+-- Функция для создания esp-никнейма для игрока
+local function createEspName(player)
+    nameEsp.Text = "{" .. player.Name .. "}"
+    local clone = gui:Clone()
+    clone.Name = player.Name .. "_esp"
+    clone.Parent = player.Character.Head
+    return clone
 end
 
-EnableName() -- вызов функции EnableName()
+-- Функция для удаления esp-никнейма игрока
+local function removeEspName(player)
+    local espName = playerEspNames[player]
+    if espName then
+        espName:Destroy()
+        playerEspNames[player] = nil
+    end
+end
 
-local function DisableName()
-    for i, v in pairs(game:GetService("Players"):GetPlayers()) do
-        if v ~= game:GetService("Players").LocalPlayer and v.Character.Head:FindFirstChild("Cracked esp") ~= nil then
-            nameEsp.Text = "{" .. v.Name .. "}"
-            gui:Destroy()
+-- Функция для включения esp-никнеймов
+local function enableEspNames()
+    for _, player in pairs(game:GetService("Players"):GetPlayers()) do
+        if player ~= game:GetService("Players").LocalPlayer and player.Character then
+            playerEspNames[player] = createEspName(player)
         end
     end
 end
 
+-- Функция для отключения esp-никнеймов
+local function disableEspNames()
+    for player, espName in pairs(playerEspNames) do
+        removeEspName(player)
+    end
+end
+
+-- Обработчик события RenderStepped
+game:GetService("RunService").RenderStepped:Connect(function()
+    -- Обновляем esp-никнеймы только для локального игрока
+    if game:GetService("Players").LocalPlayer.Character then
+        enableEspNames()
+    else
+        disableEspNames()
+    end
+end)
+
+-- Настраиваем esp-никнейм
+nameEsp.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+nameEsp.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
+nameEsp.BorderSizePixel = 4
+nameEsp.BorderColor3 = Color3.new(esp_settings.colour)
+nameEsp.BorderSizePixel = 0
+nameEsp.Font = "GothamSemibold"
+nameEsp.TextSize = esp_settings.textsize
+nameEsp.TextColor3 = Color3.fromRGB(esp_settings.colour)
+
+disableEspNames() -- Отключаем esp-никнеймы при запуске
+
 Tab:AddToggle({
     Name = "Name Esp",
-    Default = false,
+    Default = true,
     Callback = function(espn)
         NameOn = not NameOn
-
-        if not NameOn then
-            EnableName()
+        if NameOn then
+            enableEspNames()
         else
-            DisableName()
+            disableEspNames()
         end
     end
 })
