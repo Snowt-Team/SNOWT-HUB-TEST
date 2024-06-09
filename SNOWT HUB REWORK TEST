@@ -307,7 +307,7 @@ Tab:AddToggle({
 
 Tab:AddLabel("Включает/Выключает Esp Names.")
 
- local esp_settings = {
+local esp_settings = {
     textsize = 8,
     colour = 255, 255, 255
 }
@@ -339,6 +339,14 @@ local function EnableName()
             end
         end
     end)
+
+    -- Обработчик события PlayerAdded
+    game:GetService("Players").PlayerAdded:Connect(function(player)
+        if player ~= game:GetService("Players").LocalPlayer then
+            nameEsp.Text = "{" .. player.Name .. "}"
+            gui:Clone().Parent = player.Character.Head
+        end
+    end)
 end
 
 local function DisableName()
@@ -352,7 +360,7 @@ end
 
 Tab:AddToggle({
     Name = "Name Esp",
-    Default = true,
+    Default = false,
     Callback = function(espn)
         NameOn = not NameOn
 
