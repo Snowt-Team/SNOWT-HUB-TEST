@@ -368,7 +368,7 @@ end
 
 Tab:AddToggle({
     Name = "Name Esp",
-    Default = true,
+    Default = false,
     Callback = function(espn)
         NameOn = not NameOn
 
