@@ -394,14 +394,13 @@ end
 
 local function DisableNameEsp()
     for _, player in pairs(game:GetService("Players"):GetPlayers()) do
-        local character = player.Character
-        if character then
-            for _, child in pairs(character:GetChildren()) do
-                if child:IsA("Highlight") or child:IsA("BillboardGui") then
-                    child:Destroy()
-                end
+        local character = player.Character or player.CharacterAdded:Wait()
+        for _, child in pairs(character:GetChildren()) do
+            if child:IsA("Highlight") or child:IsA("BillboardGui") then
+                child:Destroy()
             end
         end
+        character:WaitForChild("Head").Adornments:DestroyAllChildren()
     end
 end
 
