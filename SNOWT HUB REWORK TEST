@@ -307,61 +307,59 @@ Tab:AddToggle({
 
 Tab:AddLabel("Включает/Выключает Esp Names.")
 
-local function EnableName()
-local esp_settings = { ---- table for esp settings 
+ local esp_settings = {
     textsize = 8,
-    colour = 255,255,255
+    colour = 255, 255, 255
 }
-    
+
 local gui = Instance.new("BillboardGui")
-local nameEsp = Instance.new("TextLabel",gui) ---- new instances to make the billboard gui and the textlabel
- 
-gui.Name = "Cracked esp"; ---- properties of the esp
-gui.ResetOnSpawn = false
-gui.AlwaysOnTop = true;
-gui.LightInfluence = 0;
-gui.Size = UDim2.new(1.75, 0, 1.75, 0);
-nameEsp.BackgroundColor3 = Color3.fromRGB(255, 255, 255);
-nameEsp.Text = ""
-nameEsp.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001);
-nameEsp.BorderSizePixel = 4;
-nameEsp.BorderColor3 = Color3.new(esp_settings.colour)
-nameEsp.BorderSizePixel = 0
-nameEsp.Font = "GothamSemibold"
-nameEsp.TextSize = esp_settings.textsize
-nameEsp.TextColor3 = Color3.fromRGB(esp_settings.colour) -- text colour
- 
-game:GetService("RunService").RenderStepped:Connect(function() ---- loops faster than a while loop :)
-    for i,v in pairs (game:GetService("Players"):GetPlayers()) do
-        if v ~= game:GetService("Players").LocalPlayer and v.Character.Head:FindFirstChild("Cracked esp")==nil  then -- craeting checks for team check, local player etc
-            nameEsp.Text = "{"..v.Name.."}"
-            gui:Clone().Parent = v.Character.Head
-    end
-end
-end)
+local nameEsp = Instance.new("TextLabel", gui)
+
+local function EnableName()
+    gui.Name = "Cracked esp"
+    gui.ResetOnSpawn = false
+    gui.AlwaysOnTop = true
+    gui.LightInfluence = 0
+    gui.Size = UDim2.new(1.75, 0, 1.75, 0)
+    nameEsp.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    nameEsp.Text = ""
+    nameEsp.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
+    nameEsp.BorderSizePixel = 4
+    nameEsp.BorderColor3 = Color3.new(esp_settings.colour)
+    nameEsp.BorderSizePixel = 0
+    nameEsp.Font = "GothamSemibold"
+    nameEsp.TextSize = esp_settings.textsize
+    nameEsp.TextColor3 = Color3.fromRGB(esp_settings.colour)
+
+    game:GetService("RunService").RenderStepped:Connect(function()
+        for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+            if v ~= game:GetService("Players").LocalPlayer and v.Character.Head:FindFirstChild("Cracked esp") == nil then
+                nameEsp.Text = "{" .. v.Name .. "}"
+                gui:Clone().Parent = v.Character.Head
+            end
+        end
+    end)
 end
 
 local function DisableName()
-    GetService("Players"):GetPlayers() do
-        if v ~= game:GetService("Players").LocalPlayer and v.Character.Head:FindFirstChild("Cracked esp")==nil  then -- craeting checks for team check, local player etc
-            nameEsp.Text = "{"..v.Name.."}"
-            if nameEsp then
-                nameEsp:Destroy()
+    for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+        if v ~= game:GetService("Players").LocalPlayer and v.Character.Head:FindFirstChild("Cracked esp") ~= nil then
+            nameEsp.Text = "{" .. v.Name .. "}"
+            gui:Destroy()
+        end
     end
-end
-end
 end
 
 Tab:AddToggle({
     Name = "Name Esp",
-    Default = false,
+    Default = true,
     Callback = function(espn)
         NameOn = not NameOn
-        
+
         if not NameOn then
             EnableName()
-            else
-                DisableName()
+        else
+            DisableName()
         end
     end
 })
