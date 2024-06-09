@@ -315,70 +315,60 @@ local esp_settings = {
 local gui = Instance.new("BillboardGui")
 local nameEsp = Instance.new("TextLabel", gui)
 
--- Таблица для хранения списков esp-никнеймов игроков
-local playerEspNames = {}
-
--- Функция для создания esp-никнейма для игрока
-local function createEspName(player)
-    nameEsp.Text = "{" .. player.Name .. "}"
-    local clone = gui:Clone()
-    clone.Name = player.Name .. "_esp"
-    clone.Parent = player.Character.Head
-    return clone
-end
-
--- Функция для удаления esp-никнейма игрока
-local function removeEspName(player)
-    local espName = playerEspNames[player]
-    if espName then
-        espName:Destroy()
-        playerEspNames[player] = nil
+local function AddEsp(char)
+    if not char.Head:FindFirstChild("Cracked esp") then
+        nameEsp.Text = "{" .. char.Parent.Name .. "}"
+        gui:Clone().Parent = char.Head
     end
 end
 
--- Функция для обновления esp-никнеймов всех игроков
-local function updateEspNames()
-    for _, player in pairs(game:GetService("Players"):GetPlayers()) do
-        if player ~= game:GetService("Players").LocalPlayer and player.Character then
-            if playerEspNames[player] == nil then
-                playerEspNames[player] = createEspName(player)
+local function EnableName()
+    gui.Name = "Cracked esp"
+    gui.ResetOnSpawn = false
+    gui.AlwaysOnTop = true
+    gui.LightInfluence = 0
+    gui.Size = UDim2.new(1.75, 0, 1.75, 0)
+    nameEsp.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    nameEsp.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
+    nameEsp.BorderSizePixel = 4
+    nameEsp.BorderColor3 = Color3.new(esp_settings.colour)
+    nameEsp.BorderSizePixel = 0
+    nameEsp.Font = "GothamSemibold"
+    nameEsp.TextSize = esp_settings.textsize
+    nameEsp.TextColor3 = Color3.fromRGB(esp_settings.colour)
+
+    game:GetService("RunService").RenderStepped:Connect(function()
+        for _, v in pairs(game:GetService("Players"):GetPlayers()) do
+            if v ~= game:GetService("Players").LocalPlayer and v.Character then
+                AddEsp(v.Character)
             end
-        else
-            removeEspName(player)
+        end
+    end)
+end
+
+function DisableName()
+    for _, v in pairs(game:GetService("Players"):GetPlayers()) do
+        if v ~= game:GetService("Players").LocalPlayer and v.Character:FindFirstChild("Cracked esp") then
+            gui:Destroy()
         end
     end
 end
 
--- Обработчик события RenderStepped
-game:GetService("RunService").RenderStepped:Connect(updateEspNames)
-
--- Настраиваем esp-никнейм
-nameEsp.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-nameEsp.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
-nameEsp.BorderSizePixel = 4
-nameEsp.BorderColor3 = Color3.new(esp_settings.colour)
-nameEsp.BorderSizePixel = 0
-nameEsp.Font = "GothamSemibold"
-nameEsp.TextSize = esp_settings.textsize
-nameEsp.TextColor3 = Color3.fromRGB(esp_settings.colour)
-
-updateEspNames() -- Первоначальное создание esp-никнеймов
+EnableName() -- вызов функции EnableName()
 
 Tab:AddToggle({
     Name = "Name Esp",
     Default = false,
     Callback = function(espn)
         NameOn = not NameOn
-        if NameOn then
-            updateEspNames()
+
+        if not NameOn then
+            EnableName()
         else
-            for player, espName in pairs(playerEspNames) do
-                removeEspName(player)
-            end
+            DisableName()
         end
     end
 })
-
 local Section = Tab:AddSection({
     Name = "Aimbot:"
 })
