@@ -393,15 +393,29 @@ end)
 end
 
 local function DisableNameEsp()
-    for _, player in pairs(game:GetService("Players"):GetPlayers()) do
-        local character = player.Character or player.CharacterAdded:Wait()
+  local originalFunction = getfenv().functionEsp
+function functionEsp() end
+
+for _, player in pairs(game:GetService("Players"):GetPlayers()) do
+    if player.Character then
+        for _, child in pairs(player.Character:GetChildren()) do
+            if child:IsA("Highlight") or child:IsA("BillboardGui") then
+                child:Destroy()
+            end
+        end
+        player.Character:WaitForChild("Head").Adornments:DestroyAllChildren()
+    end
+    player.CharacterAdded:Connect(function(character)
         for _, child in pairs(character:GetChildren()) do
             if child:IsA("Highlight") or child:IsA("BillboardGui") then
                 child:Destroy()
             end
         end
         character:WaitForChild("Head").Adornments:DestroyAllChildren()
-    end
+    end)
+end
+
+getfenv().functionEsp = originalFunction
 end
 
 Tab:AddToggle({
