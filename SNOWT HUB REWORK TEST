@@ -346,6 +346,7 @@ local function DisableName()
         if v ~= game:GetService("Players").LocalPlayer and v.Character.Head:FindFirstChild("Cracked esp")==nil  then -- craeting checks for team check, local player etc
             nameEsp.Text = "{"..v.Name.."}"
             if nameEsp then
+                name esp:Destroy()
                
     end
 end
