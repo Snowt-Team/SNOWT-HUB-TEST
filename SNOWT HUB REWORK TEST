@@ -307,6 +307,119 @@ Tab:AddToggle({
 
 Tab:AddLabel("Включает/Выключает Esp Names.")
 
+local function EnableNameEsp()
+local Outlines = true
+local OutlineColoring = Color3.fromRGB(255, 255, 255)
+local OutlineFill = false
+local FillOpacity = 1
+local FillColoring = Color3.fromRGB(255, 255, 255)
+
+local NameTags = true
+local TextFont = Enum.Font.RobotoMono
+local NameColor = Color3.fromRGB(255, 255, 255)
+local NamePositioning = false
+
+local Folder = Instance.new("Folder", game:GetService("CoreGui"))
+Folder.Name = ""
+
+AddOutline = function(Character)
+   local Highlight = Instance.new("Highlight", Folder)
+   
+   Highlight.OutlineColor = OutlineColoring
+   Highlight.Adornee = Character
+   
+   if OutlineFill == true then
+       Highlight.FillColor = FillColoring
+       Highlight.FillTransparency = FillOpacity
+   else
+       Highlight.FillTransparency = 1
+   end
+end
+
+AddNameTag = function(Character)
+   local BGui = Instance.new("BillboardGui", Folder)
+   local Frame = Instance.new("Frame", BGui)
+   local TextLabel = Instance.new("TextLabel", Frame)
+   
+   BGui.Adornee = Character:WaitForChild("Head")
+   BGui.StudsOffset = Vector3.new(0, 3, 0)
+   BGui.AlwaysOnTop = true
+   
+   BGui.Size = UDim2.new(4, 0, 0.5, 0)
+   Frame.Size = UDim2.new(1, 0, 1, 0)
+   TextLabel.Size = UDim2.new(1, 0, 1, 0)
+   
+   Frame.BackgroundTransparency = 1
+   TextLabel.BackgroundTransparency = 1
+   
+   TextLabel.Text = Character.Name
+   TextLabel.Font = TextFont
+   TextLabel.TextColor3 = NameColor
+   TextLabel.TextScaled = NamePositioning
+end
+
+for i, v in ipairs(game:GetService("Players"):GetPlayers()) do
+   if v ~= game:GetService("Players").LocalPlayer then
+       v.CharacterAdded:Connect(function(Character)
+           if Outlines == true then
+               AddOutline(Character)
+           end
+           if NameTags == true then
+               AddNameTag(Character)
+           end
+       end)
+       
+       if v.Character then
+           if Outlines == true then
+               AddOutline(v.Character)
+           end
+           if NameTags == true then
+               AddNameTag(v.Character)
+           end
+       end
+   end
+end
+
+game:GetService("Players").PlayerAdded:Connect(function(Player)
+   Player.CharacterAdded:Connect(function(Character)
+       if Outlines == true then
+           AddOutline(Character)
+       end
+       if NameTags == true then
+           AddNameTag(Character)
+       end
+   end)
+end)
+end
+
+local function DisableNameEsp()
+    local Folder = Instance.new("Folder", game:GetService("CoreGui"))
+    Folder.Name = ""
+
+    for _, highlight in pairs(Folder:GetChildren()) do
+        highlight:Destroy()
+    end
+
+    for _, textLabel in pairs(Folder:GetChildren()) do
+        textLabel:Destroy()
+    end
+
+    Folder:Destroy()
+end
+
+Tab:AddToggle({
+    Name = "Esp Names",
+    Default = false,
+    Callback = function(espn)
+        EspName = not EspName
+        if not EspName then
+            EnableNameEsp()
+            else
+            DisableNameEsp()
+        end
+    end
+})
+
 local Section = Tab:AddSection({
     Name = "Aimbot:"
 })
@@ -463,32 +576,43 @@ local Section = Tab:AddSection({
 Tab:AddButton({
     Name = "Fps boost",
     Callback = function(fpsb)
-        G.Settings = {
-    Players = {
-        ["Ignore Me"] = true, -- Ignore your Character
-        ["Ignore Others"] = true -- Ignore other Characters
-    },
-    Meshes = {
-        Destroy = false, -- Destroy Meshes
-        LowDetail = true -- Low detail meshes (NOT SURE IT DOES ANYTHING)
-    },
-    Images = {
-        Invisible = true, -- Invisible Images
-        LowDetail = false, -- Low detail images (NOT SURE IT DOES ANYTHING)
-        Destroy = false, -- Destroy Images
-    },
-    Other = {
-        ["No Particles"] = true, -- Disables all ParticleEmitter, Trail, Smoke, Fire and Sparkles
-        ["No Camera Effects"] = true, -- Disables all PostEffect's (Camera/Lighting Effects)
-        ["No Explosions"] = true, -- Makes Explosion's invisible
-        ["No Clothes"] = true, -- Removes Clothing from the game
-        ["Low Water Graphics"] = true, -- Removes Water Quality
-        ["No Shadows"] = true, -- Remove Shadows
-        ["Low Rendering"] = true, -- Lower Rendering
-        ["Low Quality Parts"] = true -- Lower quality parts
-    }
-}
-loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FPSBooster/main/FPSBooster.lua"))()
+       local a = tick()
+if not game:IsLoaded() then
+    game.Loaded:Wait()
+end
+wait(.1)
+sethiddenproperty(game.Lighting, "Technology", 2)
+sethiddenproperty(workspace:FindFirstChildOfClass("Terrain"), "Decoration", false)
+settings().Rendering.QualityLevel = 1
+setsimulationradius(0,0)
+game.Lighting.GlobalShadows = false
+game.Lighting.FogEnd = 9e9
+workspace:FindFirstChildOfClass("Terrain").Elasticity = 0
+for b, c in pairs(game:GetDescendants()) do
+    task.spawn(
+        function()
+            wait()
+            if c:IsA("DataModelMesh") then
+                sethiddenproperty(c, "LODX", Enum.LevelOfDetailSetting.Low)
+                sethiddenproperty(c, "LODY", Enum.LevelOfDetailSetting.Low)
+                c.CollisionFidelity = "Hull"
+            elseif c:IsA("UnionOperation") then
+                c.CollisionFidelity = "Hull"
+            elseif c:IsA("Model") then
+                sethiddenproperty(c, "LevelOfDetail", 1)
+            elseif c:IsA("BasePart") then
+                c.Reflectance = 0
+                c.CastShadow = false
+            end
+        end
+    )
+end
+for d, e in pairs(game.Lighting:GetChildren()) do
+    if e:IsA("PostEffect") then
+        e.Enabled = false
+    end
+end
+warn("Low graphics loaded! (" .. math.floor(tick() - a) .. "s)")
 end
 })
 
@@ -499,43 +623,7 @@ local Section = Tab:AddSection({
 Tab:AddButton({
     Name = "Fps unlock",
     Callback = function(fpsu)
-       local decalsyeeted = true -- Leaving this on makes games look shitty but the fps goes up by at least 20.
-local g = game
-local w = g.Workspace
-local l = g.Lighting
-local t = w.Terrain
-t.WaterWaveSize = 0
-t.WaterWaveSpeed = 0
-t.WaterReflectance = 0
-t.WaterTransparency = 0
-l.GlobalShadows = false
-l.FogEnd = 9e9
-l.Brightness = 0
-settings().Rendering.QualityLevel = "Level01"
-for i, v in pairs(g:GetDescendants()) do
-    if v:IsA("Part") or v:IsA("Union") or v:IsA("CornerWedgePart") or v:IsA("TrussPart") then
-        v.Material = "Plastic"
-        v.Reflectance = 0
-    elseif v:IsA("Decal") or v:IsA("Texture") and decalsyeeted then
-        v.Transparency = 1
-    elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
-        v.Lifetime = NumberRange.new(0)
-    elseif v:IsA("Explosion") then
-        v.BlastPressure = 1
-        v.BlastRadius = 1
-    elseif v:IsA("Fire") or v:IsA("SpotLight") or v:IsA("Smoke") then
-        v.Enabled = false
-    elseif v:IsA("MeshPart") then
-        v.Material = "Plastic"
-        v.Reflectance = 0
-        v.TextureID = 10385902758728957
-    end
-end
-for i, e in pairs(l:GetChildren()) do
-    if e:IsA("BlurEffect") or e:IsA("SunRaysEffect") or e:IsA("ColorCorrectionEffect") or e:IsA("BloomEffect") or e:IsA("DepthOfFieldEffect") then
-        e.Enabled = false
-    end
-end
+       setfpscap(999)
 end
 })
 
