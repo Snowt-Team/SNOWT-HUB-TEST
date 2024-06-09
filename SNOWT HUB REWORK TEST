@@ -393,16 +393,16 @@ end)
 end
 
 local function DisableNameEsp()
-    local Folder = Instance.new("Folder", game:GetService("CoreGUI"))
-    Folder.Name = ""
-    
-    for _, child in pairs(Folder:GetChildren()) do
-        if child:IsA("Highlight") or child:IsA("BillboardGui") then
-            child:Destroy()
+    for _, player in pairs(game:GetService("Players"):GetPlayers()) do
+        local character = player.Character
+        if character then
+            for _, child in pairs(character:GetChildren()) do
+                if child:IsA("Highlight") or child:IsA("BillboardGui") then
+                    child:Destroy()
+                end
+            end
         end
     end
-    
-    Folder:Destroy()
 end
 
 Tab:AddToggle({
