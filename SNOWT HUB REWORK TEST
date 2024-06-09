@@ -393,17 +393,15 @@ end)
 end
 
 local function DisableNameEsp()
-    local Folder = Instance.new("Folder", game:GetService("CoreGui"))
+    local Folder = Instance.new("Folder", game:GetService("CoreGUI"))
     Folder.Name = ""
-
-    for _, highlight in pairs(Folder:GetChildren()) do
-        highlight:Destroy()
+    
+    for _, child in pairs(Folder:GetChildren()) do
+        if child:IsA("Highlight") or child:IsA("BillboardGui") then
+            child:Destroy()
+        end
     end
-
-    for _, textLabel in pairs(Folder:GetChildren()) do
-        textLabel:Destroy()
-    end
-
+    
     Folder:Destroy()
 end
 
