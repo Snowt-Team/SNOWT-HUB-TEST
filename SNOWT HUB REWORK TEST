@@ -368,8 +368,6 @@ local function DisableName()
     end
 end
 
-DisableName()
-
 Tab:AddToggle({
     Name = "Name Esp",
     Default = false,
