@@ -306,8 +306,8 @@ Tab:AddToggle({
 })
 
 Tab:AddLabel("Включает/Выключает Esp Names.")
-
-local esp_settings = {
+    
+    local esp_settings = {
     textsize = 8,
     colour = {255, 255, 0} -- зеленый цвет
 }
@@ -316,7 +316,7 @@ local gui = Instance.new("BillboardGui")
 local parentEsp = Instance.new("TextLabel", gui)
 
 local function AddEsp(char)
-    if not char:FindFirstChild("Cracked esp") and not char:IsA("StarterCharacter") then -- Исправляет баг, из-за которого esp не добавлялся для локального игрока и добавлялся дважды для StarterCharacter
+    if not char:FindFirstChild("Cracked esp") and not char:IsA("StarterCharacter") then
         local nameEsp = Instance.new("TextLabel", parentEsp)
         nameEsp.Text = char.Parent.Name -- Устанавливаем текст nameEsp на имя игрока
         nameEsp.Name = "Cracked esp"
@@ -341,13 +341,13 @@ local function EnableName()
     parentEsp.ResetOnSpawn = true
     parentEsp.AlwaysOnTop = true
     parentEsp.LightInfluence = 0
-    
+
     game:GetService("Players").PlayerAdded:Connect(function(v)
         if v ~= game:GetService("Players").LocalPlayer then
             AddEsp(v.Character)
         end
     end)
-    
+
     game:GetService("Players").CharacterAdded:Connect(function(char)
         if char ~= game:GetService("Players").LocalPlayer.Character and not char:IsA("StarterCharacter") then
             AddEsp(char)
@@ -355,7 +355,7 @@ local function EnableName()
     end)
 end
 
-function DisableName()
+local function DisableName() -- Локальная функция DisableName()
     for _, v in pairs(game:GetService("Players"):GetPlayers()) do
         if v ~= game:GetService("Players").LocalPlayer and v.Character:FindFirstChild("Cracked esp") then
             gui:Destroy()
