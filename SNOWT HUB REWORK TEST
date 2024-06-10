@@ -357,6 +357,8 @@ local function EnableName()
     end)
 end
 
+EnableName() -- вызов функции EnableName()
+
 local function DisableName()
     for i, v in pairs(game:GetService("Players"):GetPlayers()) do
         if v ~= game:GetService("Players").LocalPlayer and v.Character.Head:FindFirstChild("Cracked esp") ~= nil then
@@ -368,7 +370,7 @@ end
 
 Tab:AddToggle({
     Name = "Name Esp",
-    Default = true,
+    Default = false,
     Callback = function(espn)
         NameOn = not NameOn
 
