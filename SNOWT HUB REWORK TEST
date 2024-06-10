@@ -487,28 +487,6 @@ local Section = Tab:AddSection({
 
 Tab:AddLabel("Включает/выключает автокликер")
 
-_G.autoClicking = false
-
-local function autoClick()
-    spawn(function()
-        while wait(0.000000000000000000)  do
-            if _G.autoClicking then
-                game:GetService("ReplicatedStorage").Packages.Knit.Services.ClickService.RF.Click:InvokeServer()
-game:GetService("ReplicatedStorage").Packages.Knit.Services.ClickService.RF.RedeemClickReward:InvokeServer()
-                wait(0.00000000000000000001)
-            end
-        end
-    end)
-end
-Tab:AddToggle({
-    Name = "Auto Click",
-    Default = false,
-    Callback = function(bool)
-_G.autoClicking = bool
-    autoClick()
-end
-})
-
 local Section = Tab:AddSection({
     Name = "Anti AFK:"
 })
