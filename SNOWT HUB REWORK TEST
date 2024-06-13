@@ -11,21 +11,25 @@ OrionLib:MakeNotification({
 
 local Tab = Window:MakeTab({
 	Name = "Main",
-	Icon = "http://www.roblox.com/asset/?id=4370345144",
+	Icon = "rbxassetid://7733960981",
 	PremiumOnly = false
 })
 
-local Section = Tab:AddSection({
-    Name = "Fly:"
+Tab:AddButton({
+	Name = "Reset",
+	Callback = function()
+		game.Players.LocalPlayer.Character.Humanoid.Health = 0
+  	end    
 })
-
-Tab:AddLabel("Загружает GUI с полетом.")
 
 Tab:AddButton({
-    Name = "Activate Fly",
-    Callback = function(fly)loadstring(game:HttpGet(("https://pastebin.com/raw/SLTqw4r4"), true))()
-    end
+	Name = "Destory UI",
+	Callback = function()
+		OrionLib:Destroy()
+  	end    
 })
+
+
 
 local Tab = Window:MakeTab({
     Name = "Teleport",
@@ -69,22 +73,25 @@ Tab:AddDropdown({
 
 local Tab = Window:MakeTab({
     Name = "Player",
-    Icon = "http://www.roblox.com/asset/?id=4335489011",
+    Icon = "rbxassetid://7743875962",
     PremiumOnly = false
-    
 })
 
 local Section = Tab:AddSection({
     Name = "WalkSpeed:"
 })
 
-Tab:AddTextbox({
-	Name = "Change WalkSpeed",
-	Default = "16",
-	TextDisappear = true,
-	Callback = function(ws)
-		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = ws
-	end	  
+Tab:AddSlider({
+	Name = "Walkspeed",
+	Min = 16,
+	Max = 500,
+	Default = 16,
+	Color = Color3.fromRGB(1, 217, 255),
+	Increment = 1,
+	ValueName = "Walkspeed",
+	Callback = function(Value)
+		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+	end    
 })
 
 Tab:AddLabel("Эта функция делает скорость базовой для всех режимов.")
@@ -100,36 +107,79 @@ local Section = Tab:AddSection({
     Name = "JumpHeight:"
 })
 
-Tab:AddTextbox({
-    Name = "Change JumpHeight",
-    Default = "16",
-    TextDisappear = true,
-    Callback = function(jh)
-        game.Players.LocalPlayer.Character.Humanoid.JumpHeight = jh
-    end
+Tab:AddSlider({
+	Name = "Jumppower",
+	Min = 50,
+	Max = 500,
+	Default = 50,
+	Color = Color3.fromRGB(1, 217, 255),
+	Increment = 1,
+	ValueName = "Jumppower",
+	Callback = function(Value)
+		game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
+	end    
 })
+
 
 Tab:AddLabel("Меняет силу прыжка до базового значения.")
 
 Tab:AddButton({
     Name = "Default JumpHeight",
     Callback = function(defj)
-        game.Players.LocalPlayer.Character.Humanoid = 7
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = 50
     end
 })
 
 Tab:AddLabel("Делает ваши прыжки бесконечными")
 
-Tab:AddButton({
-    Name = "Inf. Jumps",
-    Callback = function(infj)
-        local infjmp = true
+local function EnableInfJ()
+local infjmp = true
 game:GetService("UserInputService").jumpRequest:Connect(function()
     if infjmp then
         game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass"Humanoid":ChangeState("Jumping")
     end
 end)
 end
+
+
+local function DisableIInfJ()
+local infjmp = false
+game:GetService("UserInputService").jumpRequest:Connect(function()
+    if infjmp then
+        game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass"Humanoid":ChangeState("Jumping")
+    end
+end)
+end
+
+Tab:AddToggle({
+    Name = "Infinity Jumps",
+    Default = false,
+    Callback = function(infj)
+        InfinJ = not InfinJ
+        if not InfinJ then
+            EnableInfJ()
+            else
+                DisableIInfJ()
+        end
+    end
+})
+
+local Tab = Window:MakeTab({
+    Name = "Settings",
+    Icon = "rbxassetid://7733674820",
+    PremiumOnly = false
+})
+
+local Section = Tab:AddSection({
+    Name = "Fly:"
+})
+
+Tab:AddLabel("Загружает GUI с полетом.")
+
+Tab:AddButton({
+    Name = "Activate Fly",
+    Callback = function(fly)loadstring(game:HttpGet(("https://pastebin.com/raw/SLTqw4r4"), true))()
+    end
 })
 
 local Section = Tab:AddSection({
@@ -255,7 +305,6 @@ Tab:AddToggle({
 end
 })
 
-
 local Tab = Window:MakeTab({
     Name = "Visual",
     Icon = "rbxassetid://7733774602",
@@ -307,62 +356,7 @@ Tab:AddToggle({
 
 Tab:AddLabel("Включает/Выключает Esp Names.")
     
-local esp_settings = {
-    textsize = 8,
-    colour = 255, 255, 255
-}
-
-local gui = Instance.new("BillboardGui")
-local nameEsp = Instance.new("TextLabel", gui)
-
-local function EnableName()
-    gui.Name = "Cracked esp"
-    gui.ResetOnSpawn = false
-    gui.AlwaysOnTop = true
-    gui.LightInfluence = 0
-    gui.Size = UDim2.new(1.75, 0, 1.75, 0)
-    nameEsp.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    nameEsp.Text = ""
-    nameEsp.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001)
-    nameEsp.BorderSizePixel = 4
-    nameEsp.BorderColor3 = Color3.new(esp_settings.colour)
-    nameEsp.BorderSizePixel = 0
-    nameEsp.Font = "GothamSemibold"
-    nameEsp.TextSize = esp_settings.textsize
-    nameEsp.TextColor3 = Color3.fromRGB(esp_settings.colour)
-
-    game:GetService("RunService").RenderStepped:Connect(function()
-        for i, v in pairs(game:GetService("Players"):GetPlayers()) do
-            if v ~= game:GetService("Players").LocalPlayer and v.Character.Head:FindFirstChild("Cracked esp") == nil then
-                nameEsp.Text = "{" .. v.Name .. "}"
-                gui:Clone().Parent = v.Character.Head
-            end
-        end
-    end)
-end
-
-local function DisableName()
-    for i, v in pairs(game:GetService("Players"):GetPlayers()) do
-        if v ~= game:GetService("Players").LocalPlayer and v.Character.Head:FindFirstChild("Cracked esp") ~= nil then
-            nameEsp.Text = "{" .. v.Name .. "}"
-            gui:Destroy()
-        end
-    end
-end
-
-Tab:AddToggle({
-    Name = "Name Esp",
-    Default = false,
-    Callback = function(espn)
-        NameOn = not NameOn
-
-        if not NameOn then
-            EnableName()
-        else
-            DisableName()
-        end
-    end
-})
+    
 
 local Section = Tab:AddSection({
     Name = "Aimbot:"
