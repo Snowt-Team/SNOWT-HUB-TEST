@@ -27,9 +27,9 @@ Tab:AddButton({
 	Callback = function()
 		OrionLib:Destroy()
   	end    
-})
+})  
 
-
+    
 
 local Tab = Window:MakeTab({
     Name = "Teleport",
@@ -144,11 +144,6 @@ end
 
 local function DisableIInfJ()
 local infjmp = false
-game:GetService("UserInputService").jumpRequest:Connect(function()
-    if infjmp then
-        game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass"Humanoid":ChangeState("Jumping")
-    end
-end)
 end
 
 Tab:AddToggle({
@@ -315,48 +310,92 @@ local Section = Tab:AddSection({
     Name = "Esp:"
 })
 
-Tab:AddLabel("Включает/выключает Esp Box.")
-
-local function ShowESP()
-    for _, player in ipairs(game.Players:GetPlayers()) do
-        local esp = Instance.new("BoxHandleAdornment")
-        esp.Adornee = player.Character:FindFirstChild("HumanoidRootPart")
-        esp.Size = esp.Adornee.Size
-        esp.Color3 = Color3.fromRGB(255, 0, 0) 
-        esp.Transparency = 0.5
-        esp.ZIndex = 5
-        esp.AlwaysOnTop = true
-        esp.Visible = true
-        esp.Parent = esp.Adornee
-    end
-end
-
-local function DisableESP()
-    for _, player in ipairs(game.Players:GetPlayers()) do
-        local esp = player.Character.HumanoidRootPart:FindFirstChild("BoxHandleAdornment")
-        if esp then
-            esp:Destroy()
-        end
-    end
-end
-
+local espLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/wEquals/Solaris-Hub/main/testing.lua'),true))()
+espLib:Load()
 
 Tab:AddToggle({
-	Name = "Esp Box on/off",
+	Name = "Box ESP",
 	Default = false,
 	Callback = function(Value)
-		        ESPEnabled = not ESPEnabled 
-        if not ESPEnabled then
-            ShowESP() 
-        else
-            DisableESP() 
-        end
+		if Value then
+			espLib.options.boxes = true
+		else
+			espLib.options.boxes = false
+		end
 	end    
 })
 
-Tab:AddLabel("Включает/Выключает Esp Names.")
-    
-    
+Tab:AddToggle({
+	Name = "Name ESP",
+	Default = false,
+	Callback = function(Value)
+		if Value then
+			espLib.options.names = true
+		else
+			espLib.options.names = false
+		end
+	end    
+})
+
+Tab:AddToggle({
+	Name = "Distance",
+	Default = false,
+	Callback = function(Value)
+		if Value then
+			espLib.options.distance = true
+		else
+			espLib.options.distance = false
+		end
+	end    
+})
+
+Tab:AddToggle({
+	Name = "Chams",
+	Default = false,
+	Callback = function(Value)
+		if Value then
+			espLib.options.chams = true
+		else
+			espLib.options.chams = false
+		end
+	end    
+})
+
+Tab:AddToggle({
+	Name = "Tracers",
+	Default = false,
+	Callback = function(Value)
+		if Value then
+			espLib.options.tracers = true
+		else
+			espLib.options.tracers = false
+		end
+	end    
+})
+
+Tab:AddToggle({
+	Name = "Healthbars",
+	Default = false,
+	Callback = function(Value)
+		if Value then
+			espLib.options.healthBars = true
+		else
+			espLib.options.healthBars = false
+		end
+	end    
+})
+
+Tab:AddToggle({
+	Name = "Healthtext",
+	Default = false,
+	Callback = function(Value)
+		if Value then
+			espLib.options.healthText  = true
+		else
+			espLib.options.healthText = false
+		end
+	end    
+})
 
 local Section = Tab:AddSection({
     Name = "Aimbot:"
