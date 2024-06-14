@@ -1,4 +1,4 @@
-local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/Snowt-Scripts/ORION-GUI/main/ORION%20EDITED.txt')))()
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/Snowt-Scripts/ORION-GUI/main/ORION%20MOBILE.txt')))()
 
 local Window = OrionLib:MakeWindow({Name = "[SN] Universally | By SnowT", HidePremium = false, SaveConfig = false, ConfigFolder = "OrionTest"})
 
