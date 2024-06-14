@@ -1,10 +1,10 @@
-local OrionLib = loadstring(game:HttpGet(('hhttps://raw.githubusercontent.com/Snowt-Scripts/SNOWT-HUB-TEST/TEST-SCRIPTS/FOR-TESTERS/FOR-CREATOR/Orion%20Edited')))()
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/Snowt-Scripts/ORION-GUI/main/ORION%20EDITED.txt')))()
 
-local Window = OrionLib:MakeWindow({Name = "SNOWT HUB [REWRITEN]", HidePremium = false, SaveConfig = false, ConfigFolder = "OrionTest"})
+local Window = OrionLib:MakeWindow({Name = "[SN] Universally | By SnowT", HidePremium = false, SaveConfig = false, ConfigFolder = "OrionTest"})
 
 OrionLib:MakeNotification({
-	Name = "By Snowt Team",
-	Content = "My First script",
+	Name = "Execute notification",
+	Content = "Script injected!",
 	Image = "rbxassetid://4483345998",
 	Time = 5
 })
