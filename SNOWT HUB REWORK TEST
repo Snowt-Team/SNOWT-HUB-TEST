@@ -1,4 +1,4 @@
-local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/ionlyusegithubformcmods/1-Line-Scripts/main/Mobile%20Friendly%20Orion')))()
+local OrionLib = loadstring(game:HttpGet(('hhttps://raw.githubusercontent.com/Snowt-Scripts/SNOWT-HUB-TEST/TEST-SCRIPTS/FOR-TESTERS/FOR-CREATOR/Orion%20Edited')))()
 
 local Window = OrionLib:MakeWindow({Name = "SNOWT HUB [REWRITEN]", HidePremium = false, SaveConfig = false, ConfigFolder = "OrionTest"})
 
@@ -35,8 +35,6 @@ Tab:AddButton({
 		OrionLib:Destroy()
   	end    
 })  
-
-    
 
 local Tab = Window:MakeTab({
     Name = "Teleport",
