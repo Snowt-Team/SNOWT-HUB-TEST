@@ -15,6 +15,13 @@ local Tab = Window:MakeTab({
 	PremiumOnly = false
 })
 
+local Textlabel = script.Parent
+local players = game.Players:GetPlayers()
+local count = #players
+Textlabel.Text = "Total players: "..count
+
+Tab:AddLabel(#game.Players:GetPlayers())
+
 Tab:AddButton({
 	Name = "Reset",
 	Callback = function()
@@ -94,6 +101,21 @@ Tab:AddSlider({
 	end    
 })
 
+Tab:AddToggle({
+    Name = "Keep Walkspeed",
+	Default = false,
+	Callback = function(Value)
+KeepWalkspeed = Value
+            while KeepWalkspeed do
+                if game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") ~= nil and game.Players.LocalPlayer.Character.Humanoid.WalkSpeed ~= Walkspeed then
+                    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Walkspeed
+                end
+task.wait()
+            end
+	end    
+})
+
+
 Tab:AddLabel("Эта функция делает скорость базовой для всех режимов.")
 
 Tab:AddButton({
@@ -104,7 +126,7 @@ Tab:AddButton({
 })
 
 local Section = Tab:AddSection({
-    Name = "JumpHeight:"
+    Name = "JumpPower:"
 })
 
 Tab:AddSlider({
@@ -120,11 +142,25 @@ Tab:AddSlider({
 	end    
 })
 
+Tab:AddToggle({
+    Name = "Keep JumpPower",
+	Default = false,
+	Callback = function(Value)
+KeepJumppower = Value
+            while KeepJumppower do
+                if game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") ~= nil and game.Players.LocalPlayer.Character.Humanoid.WalkSpeed ~= Jumppower then
+                    game.Players.LocalPlayer.Character.Humanoid.JumpPower = Jumppower
+                end
+task.wait()
+            end
+	end    
+})
 
 Tab:AddLabel("Меняет силу прыжка до базового значения.")
 
+
 Tab:AddButton({
-    Name = "Default JumpHeight",
+    Name = "Default JumpPower",
     Callback = function(defj)
         game.Players.LocalPlayer.Character.Humanoid.JumpPower = 50
     end
@@ -634,6 +670,28 @@ end
 end
 })
 
+local Section = Tab:AddSection({
+    Name = "Fulbright:"
+})
+
+local function FullBright()
+	while wait() do
+		local Lighting = game:GetService("Lighting")
+		Lighting.Brightness = 2
+		Lighting.ClockTime = 14
+		Lighting.FogEnd = 100000
+		Lighting.GlobalShadows = false
+		Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)
+	end
+end
+
+Tab:AddButton({
+	Name = "Fullbright",
+	Callback = function()
+		FullBright()
+	end
+})
+
 local Tab = Window:MakeTab({
     Name = "Credits",
     Icon = "rbxassetid://7733955511",
@@ -643,3 +701,6 @@ local Tab = Window:MakeTab({
 Tab:AddLabel("Developers of Script")
 Tab:AddParagraph("SNOWT", "The designer, developer, tester, and owner of this script, as well as the owner of the telegram channel t.me/roblox_snowt_scripts")
 Tab:AddParagraph ("And no one else", "SNOWT is the sole developer and participant of the SNOWT HUB project")
+Tab:AddParagraph("Script version:", "Version script in last time: [v1.4]")
+
+OrionLib:Init()
