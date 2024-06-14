@@ -399,14 +399,24 @@ Tab:AddToggle({
 
 local Section = Tab:AddSection({
     Name = "Aimbot:"
-})
+   })
 
-Tab:AddLabel("Загружает GUI с AimBot.")
+local aimbot = loadstring(game:HttpGet'https://github.com/RunDTM/Zeerox-Aimbot/raw/main/library.lua')()
 
-Tab:AddButton({
-    Name = "AimBot GUI",
-    Callback = function(aim)loadstring(game:HttpGet(("https://pastebin.com/raw/kzsW2w0v"), true))()
-    end
+aimbot.Key = Enum.UserInputType.MouseButton2
+aimbot.Players = true
+aimbot.AliveCheck = true
+
+Tab:AddToggle({
+	Name = "Aimbot",
+	Default = false,
+	Callback = function(Value)
+		if Value then
+			aimbot.Enabled = true
+		else
+			aimbot.Enabled = false
+		end
+	end    
 })
 
 local Tab = Window:MakeTab({
