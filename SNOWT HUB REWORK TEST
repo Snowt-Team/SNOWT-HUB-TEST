@@ -1,10 +1,10 @@
-local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/Snowt-Scripts/ORION-GUI/main/ORION%20MOBILE.txt')))()
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/Snowt-Scripts/ORION-GUI/main/ORION%20EDITED.txt')))()
 
-local Window = OrionLib:MakeWindow({Name = "[SN] Universally | By SnowT", HidePremium = false, SaveConfig = false, ConfigFolder = "OrionTest"})
+local Window = OrionLib:MakeWindow({Name = "SNOWT HUB [REWRITEN]", HidePremium = false, SaveConfig = false, ConfigFolder = "OrionTest"})
 
 OrionLib:MakeNotification({
-	Name = "Execute notification",
-	Content = "Script injected!",
+	Name = "By Snowt Team",
+	Content = "My First script",
 	Image = "rbxassetid://4483345998",
 	Time = 5
 })
@@ -14,13 +14,6 @@ local Tab = Window:MakeTab({
 	Icon = "rbxassetid://7733960981",
 	PremiumOnly = false
 })
-
-local Textlabel = script.Parent
-local players = game.Players:GetPlayers()
-local count = #players
-Textlabel.Text = "Total players: "..count
-
-Tab:AddLabel(#game.Players:GetPlayers())
 
 Tab:AddButton({
 	Name = "Reset",
@@ -36,45 +29,6 @@ Tab:AddButton({
   	end    
 })  
 
-local Tab = Window:MakeTab({
-    Name = "Teleport",
-    Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
-})
-
-local Section = Tab:AddSection({
-    Name = "Teleport function:"
-})
-
-Tab:AddParagraph("Важно!", "Данная функция позволяет вам телепортироваться к любому игроку, чтобы обновить список игроков, вам нужно переинжектить скрипт.")
-
-local plrs = game.Players
-
-local playerNames = {}
-local players = plrs:GetPlayers()
-
-for _, player in ipairs(players) do
-table.insert(playerNames, player.Name)
-end
-
-Tab:AddDropdown({
-    Name = "Tp to players",
-    Default = playerNames[1] or "No players",
-    Options = playerNames,
-    Callback = function(selectedplrName)
-    local targetPlayer = plrs:FindFirstChild(selectedplrName)
-
-    if targetPlayer and targetPlayer.Character and targetPlayer.Character: FindFirstChild("HumanoidRootPart") then
-    local targetPosition = targetPlayer.Character.HumanoidRootPart.Position
-    local localPlayerRoot = plrs.LocalPlayer.Character: FindFirstChild("HumanoidRootPart")
-
-    if localPlayerRoot then
-    localPlayerRoot.CFrame = CFrame.new(targetPosition)
-    end
-    end
-    print(selectedplrName)
-    end
-})
 
 local Tab = Window:MakeTab({
     Name = "Player",
@@ -332,6 +286,46 @@ Tab:AddToggle({
             PTransparencyOff(0)
         end
 end
+})
+
+local Tab = Window:MakeTab({
+    Name = "Teleport",
+    Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local Section = Tab:AddSection({
+    Name = "Teleport function:"
+})
+
+Tab:AddParagraph("Важно!", "Данная функция позволяет вам телепортироваться к любому игроку, чтобы обновить список игроков, вам нужно переинжектить скрипт.")
+
+local plrs = game.Players
+
+local playerNames = {}
+local players = plrs:GetPlayers()
+
+for _, player in ipairs(players) do
+table.insert(playerNames, player.Name)
+end
+
+Tab:AddDropdown({
+    Name = "Tp to players",
+    Default = playerNames[1] or "No players",
+    Options = playerNames,
+    Callback = function(selectedplrName)
+    local targetPlayer = plrs:FindFirstChild(selectedplrName)
+
+    if targetPlayer and targetPlayer.Character and targetPlayer.Character: FindFirstChild("HumanoidRootPart") then
+    local targetPosition = targetPlayer.Character.HumanoidRootPart.Position
+    local localPlayerRoot = plrs.LocalPlayer.Character: FindFirstChild("HumanoidRootPart")
+
+    if localPlayerRoot then
+    localPlayerRoot.CFrame = CFrame.new(targetPosition)
+    end
+    end
+    print(selectedplrName)
+    end
 })
 
 local Tab = Window:MakeTab({
