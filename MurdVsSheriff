@@ -227,19 +227,6 @@ Tab:AddToggle({
     end
 })
 
-Tab:AddSlider({
-    Name = "Gravity",
-    Min = 0,
-    Max = 250,
-    Default = 0,
-    Color = Color3.fromRGB(1, 217, 255),
-	Increment = 1,
-	ValueName = "gravity",
-	Callback = function(Value)
-	    game.Players.LocalPlayer.Chatacter.Humanoid.Gravity = Value
-	    end
-})
-
 local Tab = Window:MakeTab({
     Name = "Settings",
     Icon = "rbxassetid://7733674820",
@@ -392,6 +379,7 @@ local Section = Tab:AddSection({
 })
 
 local espLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/wEquals/Solaris-Hub/main/testing.lua'),true))()
+
 espLib:Load()
 
 Tab:AddToggle({
