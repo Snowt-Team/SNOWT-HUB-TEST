@@ -70,8 +70,7 @@ local Window = WindUI:CreateWindow({
         Enabled = true,
         Anonymous = false,
         Callback = function()
-            print("Clicked")
-        end,
+            end,
     },
 })
 
