@@ -1,6 +1,7 @@
--- Library
+-- WindUI
 local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
 
+-- Locals
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -29,7 +30,6 @@ end
 
 local Confirmed = false
 
--- Popup
 WindUI:Popup({
     Title = gradient("SNT HUB", Color3.fromHex("#eb1010"), Color3.fromHex("#1023eb")),
     Icon = "info",
@@ -38,12 +38,12 @@ WindUI:Popup({
         {
             Title = gradient("Cancel", Color3.fromHex("#e80909"), Color3.fromHex("#630404")),
             Callback = function() end,
-            Variant = "Tertiary",
+            Variant = "Tertiary", -- Primary, Secondary, Tertiary
         },
         {
             Title = gradient("Load", Color3.fromHex("#90f09e"), Color3.fromHex("#13ed34")),
             Callback = function() Confirmed = true end,
-            Variant = "Secondary",
+            Variant = "Secondary", -- Primary, Secondary, Tertiary
         }
     }
 })
@@ -63,23 +63,19 @@ local Window = WindUI:CreateWindow({
     Icon = "infinity",
     Author = gradient("Murder Mystery 2", Color3.fromHex("#1bf2b2"), Color3.fromHex("#1bcbf2")),
     Folder = "WindUI",
-    Size = UDim2.fromOffset(310, 280),
+    Size = UDim2.fromOffset(300, 270),
     Transparent = true,
     Theme = "Dark",
-    SideBarWidth = 220,
-    Background = "",
-    User = {
-        Enabled = true,
-        Anonymous = false,
-        Callback = function()
-            end,
-    },
+    SideBarWidth = 200,
+    UserEnabled = true,
+    HasOutline = true,
 })
 
--- Open button
+-- Open Button
 Window:EditOpenButton({
-    Title = gradient("Open UI", Color3.fromHex("#eb1010"), Color3.fromHex("#1023eb")),
-    CornerRadius = UDim.new(2, 4),
+    Title = "Open UI",
+    Icon = "monitor",
+    CornerRadius = UDim.new(2, 6),
     StrokeThickness = 2,
     Color = ColorSequence.new(
         Color3.fromHex("1E213D"),
@@ -107,12 +103,11 @@ local Tabs = {
     CreateThemeTab = Window:Tab({ Title = gradient("THEMES", Color3.fromHex("#ffffff"), Color3.fromHex("#636363")), Icon = "palette", Desc = "Design and apply custom themes." }),
 }
 
--- Locals
+-- Character
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local LocalPlayer = Players.LocalPlayer
 
--- Character
 local CharacterSettings = {
     WalkSpeed = {Value = 16, Default = 16, Locked = false},
     JumpPower = {Value = 50, Default = 50, Locked = false}
@@ -184,7 +179,7 @@ Tabs.CharacterTab:Toggle({
     end
 })
 
--- Esp
+-- ESP
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -222,7 +217,6 @@ function UpdateHighlights()
     for _, player in pairs(Players:GetPlayers()) do
         if player ~= LP and player.Character then
             local highlight = player.Character:FindFirstChild("Highlight")
-            
             if not (ESPConfig.HighlightMurderer or ESPConfig.HighlightInnocent or ESPConfig.HighlightSheriff) then
                 if highlight then
                     highlight:Destroy()
@@ -232,7 +226,6 @@ function UpdateHighlights()
             
             local shouldHighlight = false
             local color = Color3.new(0, 1, 0)
-            
             if player.Name == Murder and IsAlive(player) and ESPConfig.HighlightMurderer then
                 color = Color3.fromRGB(255, 0, 0)
                 shouldHighlight = true
@@ -315,7 +308,6 @@ Tabs.EspTab:Toggle({
 
 RunService.RenderStepped:Connect(function()
     UpdateRoles()
-    
     if ESPConfig.HighlightMurderer or ESPConfig.HighlightInnocent or ESPConfig.HighlightSheriff then
         UpdateHighlights()
     end
@@ -381,7 +373,7 @@ Tabs.TeleportTab:Button({
 Tabs.TeleportTab:Button({
     Title = "Update players list",
     Callback = function()
-        teleportDropdown:Refresh({playersList})
+        teleportDropdown:Refresh({updateTeleportPlayers()})
     end
 })
 
@@ -462,15 +454,14 @@ Tabs.TeleportTab:Button({
 })
 
 Players.PlayerAdded:Connect(function()
-    teleportDropdown:Refresh({playersList})
+    teleportDropdown:Refresh({updateTeleportPlayers()})
 end)
 
 Players.PlayerRemoving:Connect(function()
-    teleportDropdown:Refresh({playersList})
+    teleportDropdown:Refresh({updateTeleportPlayers()})
 end)
 
 -- Aimbot
-
 local roles = {}
 local Murder, Sheriff
 local isCameraLocked = false
@@ -603,7 +594,6 @@ end)
 UpdateRoles()
 
 -- Combat
-
 Tabs.CombatTab:Section({Title = "Innocent"})
 
 Tabs.CombatTab:Button({
@@ -635,7 +625,6 @@ Tabs.CombatTab:Button({
 })
 
 -- Settings
-
 local Settings = {
     Hitbox = {
         Enabled = false,
@@ -823,7 +812,6 @@ Tabs.ChangelogsTab:Code({
 })
 
 -- Server
-
 local TeleportService = game:GetService("TeleportService")
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
@@ -910,7 +898,7 @@ Tabs.ServerTab:Button({
     end
 })
 
---  Configuration
+-- Configuration
 local HttpService = game:GetService("HttpService")
 
 local folderPath = "WindUI"
@@ -1041,7 +1029,6 @@ Tabs.WindowTab:Button({
 })
 
 -- Themes
-
 local currentThemeName = WindUI:GetCurrentTheme()
 local themes = WindUI:GetThemes()
 
