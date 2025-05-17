@@ -1,3 +1,4 @@
+-- Library
 local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
 
 local Players = game:GetService("Players")
@@ -28,6 +29,7 @@ end
 
 local Confirmed = false
 
+-- Popup
 WindUI:Popup({
     Title = gradient("SNT HUB", Color3.fromHex("#eb1010"), Color3.fromHex("#1023eb")),
     Icon = "info",
@@ -36,12 +38,12 @@ WindUI:Popup({
         {
             Title = gradient("Cancel", Color3.fromHex("#e80909"), Color3.fromHex("#630404")),
             Callback = function() end,
-            Variant = "Tertiary", -- Primary, Secondary, Tertiary
+            Variant = "Tertiary",
         },
         {
             Title = gradient("Load", Color3.fromHex("#90f09e"), Color3.fromHex("#13ed34")),
             Callback = function() Confirmed = true end,
-            Variant = "Secondary", -- Primary, Secondary, Tertiary
+            Variant = "Secondary",
         }
     }
 })
@@ -55,7 +57,7 @@ WindUI:Notify({
     Duration = 3,
 })
 
-
+-- Window
 local Window = WindUI:CreateWindow({
     Title = gradient("SNT&MirrozzScript [Alpha]", Color3.fromHex("#001e80"), Color3.fromHex("#16f2d9")),
     Icon = "infinity",
@@ -74,6 +76,7 @@ local Window = WindUI:CreateWindow({
     },
 })
 
+-- Open button
 Window:EditOpenButton({
     Title = gradient("Open UI", Color3.fromHex("#eb1010"), Color3.fromHex("#1023eb")),
     CornerRadius = UDim.new(2, 4),
@@ -85,6 +88,7 @@ Window:EditOpenButton({
     Draggable = true,
 })
 
+-- Tabs
 local Tabs = {
     MainTab = Window:Tab({ Title = gradient("MAIN", Color3.fromHex("#ffffff"), Color3.fromHex("#636363")), Icon = "terminal" }),
     CharacterTab = Window:Tab({ Title = gradient("CHARACTER", Color3.fromHex("#ffffff"), Color3.fromHex("#636363")), Icon = "file-cog" }),
@@ -103,11 +107,12 @@ local Tabs = {
     CreateThemeTab = Window:Tab({ Title = gradient("THEMES", Color3.fromHex("#ffffff"), Color3.fromHex("#636363")), Icon = "palette", Desc = "Design and apply custom themes." }),
 }
 
---[[ НАСТРОЙКИ ПЕРСОНАЖА ]]--
+-- Locals
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local LocalPlayer = Players.LocalPlayer
 
+-- Character
 local CharacterSettings = {
     WalkSpeed = {Value = 16, Default = 16, Locked = false},
     JumpPower = {Value = 50, Default = 50, Locked = false}
@@ -179,23 +184,21 @@ Tabs.CharacterTab:Toggle({
     end
 })
 
+-- Esp
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local LP = Players.LocalPlayer
 
--- Настройки ESP
 local ESPConfig = {
     HighlightMurderer = false,
     HighlightInnocent = false,
     HighlightSheriff = false
 }
 
--- Переменные для ролей
 local Murder, Sheriff, Hero
 local roles = {}
 
--- Функции
 function CreateHighlight(player)
     if player ~= LP and player.Character and not player.Character:FindFirstChild("Highlight") then
         local highlight = Instance.new("Highlight")
@@ -220,7 +223,6 @@ function UpdateHighlights()
         if player ~= LP and player.Character then
             local highlight = player.Character:FindFirstChild("Highlight")
             
-            -- Если ни один тоггл не активен, удаляем Highlight
             if not (ESPConfig.HighlightMurderer or ESPConfig.HighlightInnocent or ESPConfig.HighlightSheriff) then
                 if highlight then
                     highlight:Destroy()
@@ -228,22 +230,21 @@ function UpdateHighlights()
                 return
             end
             
-            -- Проверяем, нужно ли создавать Highlight для этого игрока
             local shouldHighlight = false
-            local color = Color3.new(0, 1, 0) -- По умолчанию зеленый (невинный)
+            local color = Color3.new(0, 1, 0)
             
             if player.Name == Murder and IsAlive(player) and ESPConfig.HighlightMurderer then
-                color = Color3.fromRGB(255, 0, 0) -- Красный для убийцы
+                color = Color3.fromRGB(255, 0, 0)
                 shouldHighlight = true
             elseif player.Name == Sheriff and IsAlive(player) and ESPConfig.HighlightSheriff then
-                color = Color3.fromRGB(0, 0, 255) -- Синий для шерифа
+                color = Color3.fromRGB(0, 0, 255)
                 shouldHighlight = true
             elseif ESPConfig.HighlightInnocent and IsAlive(player) and 
                    player.Name ~= Murder and player.Name ~= Sheriff and player.Name ~= Hero then
-                color = Color3.fromRGB(0, 255, 0) -- Зеленый для невинных
+                color = Color3.fromRGB(0, 255, 0)
                 shouldHighlight = true
             elseif player.Name == Hero and IsAlive(player) and not IsAlive(game.Players[Sheriff]) and ESPConfig.HighlightSheriff then
-                color = Color3.fromRGB(255, 250, 0) -- Желтый для героя
+                color = Color3.fromRGB(255, 250, 0)
                 shouldHighlight = true
             end
             
@@ -270,7 +271,6 @@ function IsAlive(player)
     return false
 end
 
--- Обновление ролей
 local function UpdateRoles()
     roles = ReplicatedStorage:FindFirstChild("GetPlayerData", true):InvokeServer()
     for name, data in pairs(roles) do
@@ -284,7 +284,6 @@ local function UpdateRoles()
     end
 end
 
--- Тогглы
 Tabs.EspTab:Section({Title = gradient("Special ESP", Color3.fromHex("#b914fa"), Color3.fromHex("#7023c2"))})
 
 Tabs.EspTab:Toggle({
@@ -314,27 +313,23 @@ Tabs.EspTab:Toggle({
     end
 })
 
--- Основной цикл
 RunService.RenderStepped:Connect(function()
     UpdateRoles()
     
-    -- Обновляем Highlight только если хотя бы один тоггл активен
     if ESPConfig.HighlightMurderer or ESPConfig.HighlightInnocent or ESPConfig.HighlightSheriff then
         UpdateHighlights()
     end
 end)
 
--- Очистка при выходе
 Players.PlayerRemoving:Connect(function(player)
     if player == LP then
         RemoveAllHighlights()
     end
 end)
 
--- [[ TELEPORT СИСТЕМА ]] --
+-- Teleport
 local teleportTarget = nil
 
--- Функция обновления списка игроков
 local function updateTeleportPlayers()
     local playersList = {}
     for _, player in pairs(Players:GetPlayers()) do
@@ -345,7 +340,6 @@ local function updateTeleportPlayers()
     return playersList
 end
 
--- Создаем дропдаун для выбора игроков
 local teleportDropdown = Tabs.TeleportTab:Dropdown({
     Title = "Players",
     Values = updateTeleportPlayers(),
@@ -355,7 +349,6 @@ local teleportDropdown = Tabs.TeleportTab:Dropdown({
     end
 })
 
--- Функция телепортации
 local function teleportToPlayer()
     if teleportTarget and teleportTarget.Character then
         local targetRoot = teleportTarget.Character:FindFirstChild("HumanoidRootPart")
@@ -380,32 +373,104 @@ local function teleportToPlayer()
     end
 end
 
--- Кнопка телепортации
 Tabs.TeleportTab:Button({
     Title = "Teleport to player",
     Callback = teleportToPlayer
 })
 
--- Кнопка обновления списка
 Tabs.TeleportTab:Button({
     Title = "Update players list",
     Callback = function()
-        teleportDropdown:Refresh({updateTeleportPlayers()})
+        teleportDropdown:Refresh({playersList})
     end
 })
 
--- Автоматическое обновление при подключении/отключении игроков
+Tabs.TeleportTab:Button({
+    Title = "Teleport to Sheriff",
+    Callback = function()
+        UpdateRoles()
+        if Sheriff then
+            local sheriffPlayer = Players:FindFirstChild(Sheriff)
+            if sheriffPlayer and sheriffPlayer.Character then
+                local targetRoot = sheriffPlayer.Character:FindFirstChild("HumanoidRootPart")
+                local localRoot = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                
+                if targetRoot and localRoot then
+                    localRoot.CFrame = targetRoot.CFrame
+                    WindUI:Notify({
+                        Title = "Телепортация",
+                        Content = "Успешно телепортирован к шерифу "..Sheriff,
+                        Icon = "check-circle",
+                        Duration = 3
+                    })
+                end
+            else
+                WindUI:Notify({
+                    Title = "Ошибка",
+                    Content = "Шериф не найден или недоступен",
+                    Icon = "x-circle",
+                    Duration = 3
+                })
+            end
+        else
+            WindUI:Notify({
+                Title = "Ошибка",
+                Content = "Шериф не определен в текущем матче",
+                Icon = "x-circle",
+                Duration = 3
+            })
+        end
+    end
+})
+
+Tabs.TeleportTab:Button({
+    Title = "Teleport to Murderer",
+    Callback = function()
+        UpdateRoles()
+        if Murder then
+            local murderPlayer = Players:FindFirstChild(Murder)
+            if murderPlayer and murderPlayer.Character then
+                local targetRoot = murderPlayer.Character:FindFirstChild("HumanoidRootPart")
+                local localRoot = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                
+                if targetRoot and localRoot then
+                    localRoot.CFrame = targetRoot.CFrame
+                    WindUI:Notify({
+                        Title = "Телепортация",
+                        Content = "Успешно телепортирован к убийце "..Murder,
+                        Icon = "check-circle",
+                        Duration = 3
+                    })
+                end
+            else
+                WindUI:Notify({
+                    Title = "Ошибка",
+                    Content = "Убийца не найден или недоступен",
+                    Icon = "x-circle",
+                    Duration = 3
+                })
+            end
+        else
+            WindUI:Notify({
+                Title = "Ошибка",
+                Content = "Убийца не определен в текущем матче",
+                Icon = "x-circle",
+                Duration = 3
+            })
+        end
+    end
+})
+
 Players.PlayerAdded:Connect(function()
-    teleportDropdown:Refresh({updateTeleportPlayers()})
+    teleportDropdown:Refresh({playersList})
 end)
 
 Players.PlayerRemoving:Connect(function()
-    teleportDropdown:Refresh({updateTeleportPlayers()})
+    teleportDropdown:Refresh({playersList})
 end)
 
---[[ СИСТЕМА АИМБОТА ]]--
+-- Aimbot
 
--- Переменные
 local roles = {}
 local Murder, Sheriff
 local isCameraLocked = false
@@ -415,7 +480,6 @@ local cameraConnection = nil
 local originalCameraType = Enum.CameraType.Custom
 local originalCameraSubject = nil
 
--- Ваши функции
 function IsAlive(player)
     for name, data in pairs(roles) do
         if player.Name == name then
@@ -439,7 +503,6 @@ local function UpdateRoles()
     end
 end
 
--- Дропдаун выбора роли
 RoleDropdown = Tabs.AimbotTab:Dropdown({
     Title = "Target Role",
     Values = {"None", "Sheriff", "Murderer"},
@@ -449,7 +512,6 @@ RoleDropdown = Tabs.AimbotTab:Dropdown({
     end
 })
 
--- Тоггл режима слежения
 Tabs.AimbotTab:Toggle({
     Title = "Spectate Mode",
     Default = false,
@@ -466,7 +528,6 @@ Tabs.AimbotTab:Toggle({
     end
 })
 
--- Тоггл фиксации камеры (без плавности)
 Tabs.AimbotTab:Toggle({
     Title = "Lock Camera",
     Default = false,
@@ -479,7 +540,6 @@ Tabs.AimbotTab:Toggle({
     end
 })
 
--- Функции камеры
 local function GetTargetPosition()
     if not lockedRole then return nil end
     local targetName = lockedRole == "Sheriff" and Sheriff or Murder
@@ -492,7 +552,6 @@ local function GetTargetPosition()
     return head and head.Position or nil
 end
 
--- Режим слежения (без изменений)
 local function UpdateSpectate()
     if not isSpectating or not lockedRole then return end
     local targetPos = GetTargetPosition()
@@ -507,16 +566,14 @@ local function UpdateSpectate()
     end
 end
 
--- Новая версия фиксации камеры (без плавности)
 local function UpdateLockCamera()
     if not isCameraLocked or not lockedRole then return end
     local targetPos = GetTargetPosition()
     if not targetPos then return end
     local currentPos = CurrentCamera.CFrame.Position
-    CurrentCamera.CFrame = CFrame.new(currentPos, targetPos) -- Мгновенная фиксация
+    CurrentCamera.CFrame = CFrame.new(currentPos, targetPos)
 end
 
--- Основной цикл обновления
 local function Update()
     if isSpectating then
         UpdateSpectate()
@@ -525,7 +582,6 @@ local function Update()
     end
 end
 
--- Автообновление ролей
 local function AutoUpdate()
     while true do
         UpdateRoles()
@@ -533,11 +589,9 @@ local function AutoUpdate()
     end
 end
 
--- Инициализация
 coroutine.wrap(AutoUpdate)()
 cameraConnection = RunService.RenderStepped:Connect(Update)
 
--- Очистка при выходе
 LocalPlayer.AncestryChanged:Connect(function()
     if not LocalPlayer.Parent and cameraConnection then
         cameraConnection:Disconnect()
@@ -546,8 +600,9 @@ LocalPlayer.AncestryChanged:Connect(function()
     end
 end)
 
--- Первоначальное обновление
 UpdateRoles()
+
+-- Combat
 
 Tabs.CombatTab:Section({Title = "Innocent"})
 
@@ -579,6 +634,8 @@ Tabs.CombatTab:Button({
     end
 })
 
+-- Settings
+
 local Settings = {
     Hitbox = {
         Enabled = false,
@@ -597,7 +654,6 @@ local Settings = {
     }
 }
 
--- Ноклип
 local function ToggleNoclip(state)
         if state then
             Settings.Noclip.Connection = RunService.Stepped:Connect(function()
@@ -617,7 +673,6 @@ local function ToggleNoclip(state)
         end
 end
 
--- Хитбоксы
 local function UpdateHitboxes()
         for _, plr in pairs(Players:GetPlayers()) do
             if plr ~= LocalPlayer then
@@ -649,7 +704,6 @@ local function UpdateHitboxes()
         end
 end
 
--- Анти-AFK
 local function ToggleAntiAFK(state)
         if state then
             Settings.AntiAFK.Connection = RunService.Heartbeat:Connect(function()
@@ -665,8 +719,6 @@ local function ToggleAntiAFK(state)
             end
         end
 end
-
--- Интерфейс
 
 Tabs.SettingsTab:Toggle({
     Title = "NoClip",
@@ -717,8 +769,7 @@ Tabs.SettingsTab:Toggle({
     end
 })
 
--- [[ Socials ]] --
-
+-- Socials
 Tabs.SocialsTab:Paragraph({
     Title = "SnowT",
     Desc = "Join to my socials for know more information!",
@@ -747,8 +798,7 @@ Tabs.SocialsTab:Button({
     end
 })
 
--- [[ Changelogs ]] --
-
+-- Changelogs
 Tabs.ChangelogsTab:Code({
     Title = "Changelogs:",
     Code = [[
@@ -772,7 +822,7 @@ Tabs.ChangelogsTab:Code({
 ]]
 })
 
--- [[ Server ]] --
+-- Server
 
 local TeleportService = game:GetService("TeleportService")
 local HttpService = game:GetService("HttpService")
@@ -860,7 +910,7 @@ Tabs.ServerTab:Button({
     end
 })
 
--- UI настройки
+--  Configuration
 local HttpService = game:GetService("HttpService")
 
 local folderPath = "WindUI"
@@ -990,6 +1040,8 @@ Tabs.WindowTab:Button({
     end
 })
 
+-- Themes
+
 local currentThemeName = WindUI:GetCurrentTheme()
 local themes = WindUI:GetThemes()
 
@@ -1013,7 +1065,7 @@ Tabs.CreateThemeTab:Colorpicker({
     Title = "Background Color",
     Default = Color3.fromHex(ThemeAccent),
     Callback = function(color)
-        ThemeAccent = color -- Убрано :ToHex()
+        ThemeAccent = color
     end
 })
 
@@ -1021,7 +1073,7 @@ Tabs.CreateThemeTab:Colorpicker({
     Title = "Outline Color",
     Default = Color3.fromHex(ThemeOutline),
     Callback = function(color)
-        ThemeOutline = color -- Убрано :ToHex()
+        ThemeOutline = color
     end
 })
 
@@ -1029,7 +1081,7 @@ Tabs.CreateThemeTab:Colorpicker({
     Title = "Text Color",
     Default = Color3.fromHex(ThemeText),
     Callback = function(color)
-        ThemeText = color -- Убрано :ToHex()
+        ThemeText = color
     end
 })
 
@@ -1037,7 +1089,7 @@ Tabs.CreateThemeTab:Colorpicker({
     Title = "Placeholder Text Color",
     Default = Color3.fromHex(ThemePlaceholderText),
     Callback = function(color)
-        ThemePlaceholderText = color -- Убрано :ToHex()
+        ThemePlaceholderText = color
     end
 })
 
