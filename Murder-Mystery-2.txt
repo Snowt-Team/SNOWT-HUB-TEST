@@ -26,17 +26,6 @@ function gradient(text, startColor, endColor)
     return result
 end
 
-WindUI:AddTheme({
-    Name = "SnowTTheme",
-    Accent = "#18181b",
-    Outline = "#3c10eb",
-    Text = "#FFFFFF",
-    Placeholder = "#999999",
-    Background = "#171717",
-    Button = "#52525b",
-    Icon = "#00ffbf",
-})
-
 local Confirmed = false
 
 WindUI:Popup({
@@ -74,7 +63,7 @@ local Window = WindUI:CreateWindow({
     Folder = "WindUI",
     Size = UDim2.fromOffset(310, 280),
     Transparent = true,
-    Theme = "SnowTTheme",
+    Theme = "Dark",
     SideBarWidth = 220,
     Background = "",
     User = {
