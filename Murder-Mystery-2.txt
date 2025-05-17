@@ -26,12 +26,23 @@ function gradient(text, startColor, endColor)
     return result
 end
 
+WindUI:AddTheme({
+    Name = "SnowTTheme",
+    Accent = "#18181b",
+    Outline = "#3c10eb",
+    Text = "#FFFFFF",
+    Placeholder = "#999999",
+    Background = "#171717",
+    Button = "#52525b",
+    Icon = "#00ffbf",
+})
+
 local Confirmed = false
 
 WindUI:Popup({
-    Title = gradient("SNT Hub", Color3.fromHex("#eb1010"), Color3.fromHex("#1023eb")),
+    Title = gradient("SNT HUB", Color3.fromHex("#eb1010"), Color3.fromHex("#1023eb")),
     Icon = "info",
-    Content = gradient("This script made by", Color3.fromHex("#10eb3c"), Color3.fromHex("#67c97a")) .. gradient(" SnowTTeam", Color3.fromHex("#001e80"), Color3.fromHex("#16f2d9")),
+    Content = gradient("This script made by", Color3.fromHex("#10eb3c"), Color3.fromHex("#67c97a")) .. gradient(" SnowT", Color3.fromHex("#001e80"), Color3.fromHex("#16f2d9")),
     Buttons = {
         {
             Title = gradient("Cancel", Color3.fromHex("#e80909"), Color3.fromHex("#630404")),
@@ -40,7 +51,6 @@ WindUI:Popup({
         },
         {
             Title = gradient("Load", Color3.fromHex("#90f09e"), Color3.fromHex("#13ed34")),
-            Icon = "arrow-right",
             Callback = function() Confirmed = true end,
             Variant = "Secondary", -- Primary, Secondary, Tertiary
         }
@@ -62,18 +72,23 @@ local Window = WindUI:CreateWindow({
     Icon = "infinity",
     Author = gradient("Murder Mystery 2", Color3.fromHex("#1bf2b2"), Color3.fromHex("#1bcbf2")),
     Folder = "WindUI",
-    Size = UDim2.fromOffset(300, 270),
+    Size = UDim2.fromOffset(310, 280),
     Transparent = true,
-    Theme = "Dark",
-    SideBarWidth = 200,
-    UserEnabled = true,
-    HasOutline = true,
+    Theme = "SnowTTheme",
+    SideBarWidth = 220,
+    Background = "",
+    User = {
+        Enabled = true,
+        Anonymous = false,
+        Callback = function()
+            print("Clicked")
+        end,
+    },
 })
 
 Window:EditOpenButton({
-    Title = "Open UI",
-    Icon = "monitor",
-    CornerRadius = UDim.new(2, 6),
+    Title = gradient("Open UI", Color3.fromHex("#eb1010"), Color3.fromHex("#1023eb")),
+    CornerRadius = UDim.new(2, 4),
     StrokeThickness = 2,
     Color = ColorSequence.new(
         Color3.fromHex("1E213D"),
@@ -84,7 +99,7 @@ Window:EditOpenButton({
 
 local Tabs = {
     MainTab = Window:Tab({ Title = gradient("MAIN", Color3.fromHex("#ffffff"), Color3.fromHex("#636363")), Icon = "terminal" }),
-    CharacterTab = Window:Tab({ Title = gradient("Character", Color3.fromHex("#ffffff"), Color3.fromHex("#636363")), Icon = "file-cog" }),
+    CharacterTab = Window:Tab({ Title = gradient("CHARACTER", Color3.fromHex("#ffffff"), Color3.fromHex("#636363")), Icon = "file-cog" }),
     TeleportTab = Window:Tab({ Title = gradient("TELEPORT", Color3.fromHex("#ffffff"), Color3.fromHex("#636363")), Icon = "user" }),
     EspTab = Window:Tab({ Title = gradient("ESP", Color3.fromHex("#ffffff"), Color3.fromHex("#636363")), Icon = "eye" }),
     AimbotTab = Window:Tab({ Title = gradient("AIMBOT", Color3.fromHex("#ffffff"), Color3.fromHex("#636363")), Icon = "arrow-right" }),
